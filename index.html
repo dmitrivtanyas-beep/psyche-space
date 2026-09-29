@@ -121,7 +121,7 @@
                     <div class="flex-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm text-sm leading-relaxed">
                         <p class="font-semibold text-brand-600 dark:text-brand-400 mb-1">Привіт! Я твій емпатичний психологічний компаньйон.</p>
                         <p class="mb-2">Поділися своїми думками або переживаннями у текстовому форматі.</p>
-                        <p class="text-xs text-slate-400 italic">💡 Натисніть іконку шестерні (⚙️) зверху, щоб ввести ваш Groq API ключ та налаштувати модель.</p>
+                        <p class="text-xs text-slate-400 italic">💡 Натисніть іконку шестерні (⚙️) зверху, щоб налаштувати ключ та модель.</p>
                     </div>
                 </div>
             </div>
@@ -409,7 +409,7 @@
         function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
         function handleKeydown(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('chat-form').requestSubmit(); } }
 
-        // Виклик Groq API з динамічною моделлю
+        // Виклик Groq API (з короткими, лаконічними відповідями)
         async function callGroqAPI(messagesHistory, customPrompt) {
             const apiKey = getActiveGroqKey();
             const modelName = getActiveGroqModel();
@@ -420,7 +420,8 @@
             }
 
             const systemPrompt = `Ти — професійний емпатичний психологічний AI-компаньйон у додатку PsycheSpace. 
-Поточний терапевтичний режим: ${currentMode}. Відповідай м'яко, глибоко, емпатично та професійно українською мовою.`;
+Поточний терапевтичний режим: ${currentMode}. 
+ВАЖЛИВО: Відповідай дуже коротко, лаконічно, короткими абзацами (не більше 2-3 речень), без води, довгих вступів та лекцій. Став одне влучне запитання для продовження діалогу. Пиши українською мовою.`;
 
             let messages = [
                 { role: "system", content: systemPrompt }
@@ -466,11 +467,11 @@
                 return { text: "Я — твій психологічний компаньйон у PsycheSpace. Допомагаю розібратися в думках через КПТ, Гештальт або Вирішення проблем.", step: "Ознайомлення" };
             }
             if (mode === 'cbt') {
-                return { text: "Я слухаю тебе. Яка конкретна думка викликає у тебе найбільше напруження зараз, і на чому вона базується?", step: "Аналіз думок (КПТ)" };
+                return { text: "Я слухаю тебе. Яка конкретна думка викликає у тебе найбільше напруження зараз?", step: "Аналіз думок (КПТ)" };
             } else if (mode === 'gestalt') {
-                return { text: "Зверни увагу на своє тіло в цю хвилину. Що ти відчуваєш фізично, коли говориш про це?", step: "Контакт з тілом (Гештальт)" };
+                return { text: "Зверни увагу на своє тіло зараз. Що ти відчуваєш фізично?", step: "Контакт з тілом (Гештальт)" };
             } else {
-                return { text: "Давай сфокусуємося на рішенні: який один маленький крок ти можеш зробити просто зараз?", step: "Фокус на дію" };
+                return { text: "Який один маленький крок ти можеш зробити просто зараз?", step: "Фокус на дію" };
             }
         }
 
