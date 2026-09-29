@@ -475,7 +475,6 @@
                 console.warn("Помилка зв'язку з Groq API:", err);
                 appendMessage('system', `⚠️ ${err.message}`);
                 
-                // Якщо немає ключа — відкриваємо вікно налаштувань
                 if (!getActiveGroqKey()) {
                     openSettingsModal();
                 } else {
@@ -619,7 +618,7 @@
 Архів:
 ${archiveText}`;
 
-ж            try {
+            try {
                 const aiResult = await callGroqAPI([], prompt);
                 body.innerHTML = `
                     <div class="space-y-4">
@@ -634,7 +633,7 @@ ${archiveText}`;
             }
         }
 
-        function escapeHtml(text) { return text.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]));}
+        function escapeHtml(text) { return text.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m])); }
     </script>
 </body>
 </html>
