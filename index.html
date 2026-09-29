@@ -409,7 +409,7 @@
         function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
         function handleKeydown(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('chat-form').requestSubmit(); } }
 
-        // Виклик Groq API (з короткими, лаконічними відповідями)
+        // Виклик Groq API
         async function callGroqAPI(messagesHistory, customPrompt) {
             const apiKey = getActiveGroqKey();
             const modelName = getActiveGroqModel();
@@ -605,29 +605,42 @@
             `).join('');
         }
 
-        function analyzeArchivedSession(index) {
+        // ШІ-аналіз конкретної архівної сесії
+        async function analyzeArchivedSession(index) {
             const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
             const session = arc[index];
             if (!session) return;
 
-            document.getElementById('summary-modal-title').innerText = `Сесія від ${session.date}`;
+            document.getElementById('summary-modal-title').innerText = `Аналіз сесії від ${session.date}`;
             document.getElementById('summary-modal').classList.remove('hidden');
             
             const body = document.getElementById('summary-modal-body');
-            body.innerHTML = `
-                <div class="space-y-4">
-                    <div class="p-5 rounded-2xl bg-brand-50 dark:bg-brand-900/30 border border-brand-100 dark:border-brand-800 space-y-2">
-                        <h4 class="font-bold text-brand-700 dark:text-brand-300 text-xs uppercase tracking-wider">💡 Режим сесії: ${session.mode.toUpperCase()}</h4>
-                        <p class="text-xs text-slate-600 dark:text-slate-300">Пройдених кроків рефлексії: ${session.timeline ? session.timeline.length : 0}</p>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-2">Лог діалогу</h4>
-                        <div class="space-y-2 max-h-60 overflow-y-auto p-3 rounded-xl bg-slate-100 dark:bg-slate-800/50 custom-scrollbar">
-                            ${session.messages.map(m => `<div class="text-xs ${m.sender === 'user' ? 'text-brand-600 dark:text-brand-400 font-medium' : 'text-slate-600 dark:text-slate-300'} mb-2"><strong>${m.sender === 'user' ? 'Ви' : 'AI'}:</strong> ${escapeHtml(m.text)}</div>`).join('')}
+            body.innerHTML = `<div class="text-center py-12 text-sm text-slate-500 animate-pulse">Штучний інтелект аналізує цю сесію...</div>`;
+
+            const sessionText = (session.messages || []).map(m => `${m.sender === 'user' ? 'Ви' : 'AI'}: ${m.text}`).join('\n');
+            const prompt = `Проведи короткий психологічний аналіз цієї окремої сесії рефлексії (режим: ${session.mode.toUpperCase()}). Виділи головний інсайт, емоційний стан та дай коротку стратегічну рекомендацію українською мовою.
+Лог діалогу:
+${sessionText}`;
+
+            try {
+                const aiAnalysis = await callGroqAPI([], prompt);
+                body.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="p-5 rounded-2xl bg-brand-50 dark:bg-brand-900/30 border border-brand-100 dark:border-brand-800 space-y-2">
+                            <h4 class="font-bold text-brand-700 dark:text-brand-300 text-xs uppercase tracking-wider">💡 ШІ-аналіз сесії (${session.mode.toUpperCase()})</h4>
+                            <div class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-line">${escapeHtml(aiAnalysis)}</div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-2">Лог діалогу</h4>
+                            <div class="space-y-2 max-h-60 overflow-y-auto p-3 rounded-xl bg-slate-100 dark:bg-slate-800/50 custom-scrollbar">
+                                ${session.messages.map(m => `<div class="text-xs ${m.sender === 'user' ? 'text-brand-600 dark:text-brand-400 font-medium' : 'text-slate-600 dark:text-slate-300'} mb-2"><strong>${m.sender === 'user' ? 'Ви' : 'AI'}:</strong> ${escapeHtml(m.text)}</div>`).join('')}
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+            } catch (err) {
+                body.innerHTML = `<div class="p-4 rounded-xl bg-rose-50 text-rose-700 text-xs">Помилка аналізу сесії: ${escapeHtml(err.message)}</div>`;
+            }
         }
 
         async function analyzeAllArchive() {
@@ -635,7 +648,7 @@
             if (arc.length === 0) return alert('Архів порожній.');
 
             document.getElementById('summary-modal-title').innerText = "Глобальний мета-аналіз архіву";
-            document.getElementById('summary-modal').classList.add('hidden');
+            document.getElementById('summary-modal').classList.remove('hidden');
             
             const body = document.getElementById('summary-modal-body');
             body.innerHTML = `<div class="text-center py-12 text-sm text-slate-500 animate-pulse">Штучний інтелект аналізує всю історію вашої рефлексії...</div>`;
