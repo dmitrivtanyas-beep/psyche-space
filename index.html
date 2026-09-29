@@ -121,7 +121,7 @@
                     <div class="flex-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm text-sm leading-relaxed">
                         <p class="font-semibold text-brand-600 dark:text-brand-400 mb-1">Привіт! Я твій емпатичний психологічний компаньйон.</p>
                         <p class="mb-2">Поділися своїми думками або переживаннями у текстовому форматі.</p>
-                        <p class="text-xs text-slate-400 italic">💡 Натисніть іконку шестерні (⚙️) зверху, щоб ввести ваш безкоштовний ключ Groq API.</p>
+                        <p class="text-xs text-slate-400 italic">💡 Натисніть іконку шестерні (⚙️) зверху, щоб ввести ваш Groq API ключ та налаштувати модель.</p>
                     </div>
                 </div>
             </div>
@@ -155,12 +155,23 @@
     <div id="settings-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-fade-in">
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
             <div class="flex items-center justify-between">
-                <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Налаштування Groq API ключа</h2>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Налаштування Groq API</h2>
                 <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
-            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Введіть ваш безкоштовний ключ, отриманий на <a href="https://console.groq.com/" target="_blank" class="text-brand-600 underline">Groq Console</a>. Ключ зберігається лише у вашому браузері:</p>
-            <input type="password" id="api-key-input" placeholder="Вставте ваш Groq API ключ сюди..." class="w-full px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none text-slate-800 dark:text-slate-100">
-            <button onclick="saveApiKey()" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md transition">Зберегти ключ</button>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Введіть ваш ключ та вкажіть модель, яка доступна на <a href="https://console.groq.com/" target="_blank" class="text-brand-600 underline">Groq Console</a>:</p>
+            
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">API Ключ:</label>
+                    <input type="password" id="api-key-input" placeholder="gsk_..." class="w-full px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none text-slate-800 dark:text-slate-100">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Назва моделі:</label>
+                    <input type="text" id="api-model-input" placeholder="llama3-70b-8192" class="w-full px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none text-slate-800 dark:text-slate-100">
+                </div>
+            </div>
+
+            <button onclick="saveApiKey()" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md transition">Зберегти налаштування</button>
         </div>
     </div>
 
@@ -238,9 +249,14 @@
             return localStorage.getItem('psyche_groq_api_key') || '';
         }
 
+        function getActiveGroqModel() {
+            return localStorage.getItem('psyche_groq_model') || 'llama3-70b-8192';
+        }
+
         function openSettingsModal() {
             document.getElementById('settings-modal').classList.remove('hidden');
             document.getElementById('api-key-input').value = localStorage.getItem('psyche_groq_api_key') || '';
+            document.getElementById('api-model-input').value = localStorage.getItem('psyche_groq_model') || 'llama3-70b-8192';
         }
 
         function closeSettingsModal() {
@@ -249,13 +265,21 @@
 
         function saveApiKey() {
             const key = document.getElementById('api-key-input').value.trim();
+            const model = document.getElementById('api-model-input').value.trim();
+            
             if (key) {
                 localStorage.setItem('psyche_groq_api_key', key);
-                alert('Ваш Groq API ключ успішно збережено локально!');
             } else {
                 localStorage.removeItem('psyche_groq_api_key');
-                alert('Ключ видалено.');
             }
+
+            if (model) {
+                localStorage.setItem('psyche_groq_model', model);
+            } else {
+                localStorage.setItem('psyche_groq_model', 'llama3-70b-8192');
+            }
+
+            alert('Налаштування успішно збережено!');
             closeSettingsModal();
         }
 
@@ -385,9 +409,11 @@
         function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
         function handleKeydown(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('chat-form').requestSubmit(); } }
 
-        // Виклик Groq API з оновленою моделлю
+        // Виклик Groq API з динамічною моделлю
         async function callGroqAPI(messagesHistory, customPrompt) {
             const apiKey = getActiveGroqKey();
+            const modelName = getActiveGroqModel();
+            
             if (!apiKey) {
                 openSettingsModal();
                 throw new Error("Будь ласка, введіть ваш Groq API ключ у налаштуваннях (іконка шестерні зверху).");
@@ -418,7 +444,7 @@
                     'Authorization': `Bearer ${apiKey}`
                 },
                 body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile", // Використовуємо стабільну актуальну модель на Groq
+                    model: modelName,
                     messages: messages,
                     temperature: 0.7
                 })
@@ -608,7 +634,7 @@
             if (arc.length === 0) return alert('Архів порожній.');
 
             document.getElementById('summary-modal-title').innerText = "Глобальний мета-аналіз архіву";
-            document.getElementById('summary-modal').classList.remove('hidden');
+            document.getElementById('summary-modal').classList.add('hidden');
             
             const body = document.getElementById('summary-modal-body');
             body.innerHTML = `<div class="text-center py-12 text-sm text-slate-500 animate-pulse">Штучний інтелект аналізує всю історію вашої рефлексії...</div>`;
