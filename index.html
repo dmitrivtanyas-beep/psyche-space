@@ -121,7 +121,7 @@
                     <div class="flex-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm text-sm leading-relaxed">
                         <p class="font-semibold text-brand-600 dark:text-brand-400 mb-1">Привіт! Я твій емпатичний психологічний компаньйон.</p>
                         <p class="mb-2">Поділися своїми думками або переживаннями у текстовому форматі.</p>
-                        <p class="text-xs text-slate-400 italic">💡 Натисніть іконку шестерні (⚙️) зверху, щоб ввести свій власний ключ Google AI Studio.</p>
+                        <p class="text-xs text-slate-400 italic">💡 Натисніть іконку шестерні (⚙️️) зверху, щоб ввести свій власний ключ Google AI Studio.</p>
                     </div>
                 </div>
             </div>
@@ -413,7 +413,7 @@
             } catch(err) {
                 showTyping(false);
                 console.warn("Помилка зв'язку з Gemini API:", err);
-                appendMessage('system', `⚠️ Помилка API: ${err.message}`);
+                appendMessage('system', `⚠️️ Помилка API: ${err.message}`);
                 setTimeout(() => {
                     const reply = getSmartLocalResponse(text, currentMode);
                     appendMessage('ai', reply.text);
@@ -636,7 +636,7 @@ ${archiveText}`;
             }
         }
 
-        function escapeHtml(text) { return text.regex(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m])); }
+        function escapeHtml(text) { return text.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m])); }
     </script>
 </body>
 </html>
