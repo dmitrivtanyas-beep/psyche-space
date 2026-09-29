@@ -158,7 +158,7 @@
                 <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Налаштування Groq API ключа</h2>
                 <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
-            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Введіть ваш безкоштовний ключ, отриманий на <a href="https://console.groq.com/" target="_blank" class="text-brand-600 underline">Groq Console</a>. Ключ зберігається лише у вашому браузері та не потрапить до репозиторію:</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Введіть ваш безкоштовний ключ, отриманий на <a href="https://console.groq.com/" target="_blank" class="text-brand-600 underline">Groq Console</a>. Ключ зберігається лише у вашому браузері:</p>
             <input type="password" id="api-key-input" placeholder="Вставте ваш Groq API ключ сюди..." class="w-full px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none text-slate-800 dark:text-slate-100">
             <button onclick="saveApiKey()" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md transition">Зберегти ключ</button>
         </div>
@@ -385,7 +385,7 @@
         function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
         function handleKeydown(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('chat-form').requestSubmit(); } }
 
-        // Виклик Groq API з урахуванням локального ключа
+        // Виклик Groq API з оновленою моделлю
         async function callGroqAPI(messagesHistory, customPrompt) {
             const apiKey = getActiveGroqKey();
             if (!apiKey) {
@@ -418,7 +418,7 @@
                     'Authorization': `Bearer ${apiKey}`
                 },
                 body: JSON.stringify({
-                    model: "llama-3.1-8b-instant",
+                    model: "llama-3.3-70b-versatile", // Використовуємо стабільну актуальну модель на Groq
                     messages: messages,
                     temperature: 0.7
                 })
