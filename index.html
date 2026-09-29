@@ -68,6 +68,10 @@
             <button onclick="openAnalyticsModal()" class="px-2.5 py-2 text-xs font-medium rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 transition">
                 Архів
             </button>
+            <!-- Кнопка налаштувань API -->
+            <button onclick="openSettingsModal()" class="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Налаштування API">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </button>
             <!-- Завершити сесію -->
             <button id="finish-btn" onclick="finishSession()" class="hidden px-3 py-2 text-xs font-semibold rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 text-white transition flex items-center space-x-1">
                 <span>Закінчити</span>
@@ -117,7 +121,7 @@
                     <div class="flex-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm text-sm leading-relaxed">
                         <p class="font-semibold text-brand-600 dark:text-brand-400 mb-1">Привіт! Я твій емпатичний психологічний компаньйон.</p>
                         <p class="mb-2">Поділися своїми думками або переживаннями у текстовому форматі.</p>
-                        <p class="text-xs text-slate-400 italic">💡 Працює повністю автономно з браузера.</p>
+                        <p class="text-xs text-slate-400 italic">💡 Якщо сервери перевантажені, натисніть іконку шестерні (⚙️) зверху, щоб ввести свій власний API ключ.</p>
                     </div>
                 </div>
             </div>
@@ -145,6 +149,19 @@
                 </form>
             </div>
         </main>
+    </div>
+
+    <!-- SETTINGS MODAL -->
+    <div id="settings-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-fade-in">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Налаштування API ключа</h2>
+                <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Якщо стандартний ключ перевантажений, створіть свій безкоштовний ключ на <a href="https://aistudio.google.com/" target="_blank" class="text-brand-600 underline">Google AI Studio</a> та введіть його нижче:</p>
+            <input type="password" id="api-key-input" placeholder="Вставте ваш API ключ сюди..." class="w-full px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none text-slate-800 dark:text-slate-100">
+            <button onclick="saveApiKey()" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md transition">Зберегти ключ</button>
+        </div>
     </div>
 
     <!-- MOOD TRACKER MODAL -->
@@ -217,8 +234,32 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Ваш зашитий ключ Gemini API
-        const DEFAULT_API_KEY = 'AIzaSyAPTstBt_X9I5VkymZd3VGBw-zZWAuW0dA';
+        const FALLBACK_API_KEY = 'AIzaSyAPTstBt_X9I5VkymZd3VGBw-zZWAuW0dA';
+
+        function getActiveApiKey() {
+            return localStorage.getItem('psyche_custom_api_key') || FALLBACK_API_KEY;
+        }
+
+        function openSettingsModal() {
+            document.getElementById('settings-modal').classList.remove('hidden');
+            document.getElementById('api-key-input').value = localStorage.getItem('psyche_custom_api_key') || '';
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settings-modal').classList.add('hidden');
+        }
+
+        function saveApiKey() {
+            const key = document.getElementById('api-key-input').value.trim();
+            if (key) {
+                localStorage.setItem('psyche_custom_api_key', key);
+                alert('Ваш особистий API ключ успішно збережено!');
+            } else {
+                localStorage.removeItem('psyche_custom_api_key');
+                alert('Ключ скинуто до стандартного.');
+            }
+            closeSettingsModal();
+        }
 
         let currentMode = 'cbt'; 
         let sessionState = { messages: [], timeline: [] };
@@ -364,7 +405,7 @@
             showTyping(true);
 
             try {
-                const aiReply = await callDirectGeminiAPI(DEFAULT_API_KEY, sessionState.messages);
+                const aiReply = await callDirectGeminiAPI(getActiveApiKey(), sessionState.messages);
                 showTyping(false);
                 appendMessage('ai', aiReply);
                 speak(aiReply);
@@ -372,7 +413,7 @@
             } catch(err) {
                 showTyping(false);
                 console.warn("Помилка зв'язку з Gemini API, використовуємо локальний режим:", err);
-                appendMessage('system', '⚠️ Сервери зайняті, переходимо на резервний локальний помічник.');
+                appendMessage('system', '⚠️ Сервери перевантажені або перевищено ліміт ключа. Натисніть на іконку шестерні (⚙️) у верхній панелі, щоб ввести власний ключ.');
                 setTimeout(() => {
                     const reply = getSmartLocalResponse(text, currentMode);
                     appendMessage('ai', reply.text);
@@ -546,7 +587,7 @@
 ${historyText}`;
 
             try {
-                const aiResult = await callDirectGeminiAPI(DEFAULT_API_KEY, null, prompt);
+                const aiResult = await callDirectGeminiAPI(getActiveApiKey(), null, prompt);
                 body.innerHTML = `
                     <div class="space-y-4">
                         <div class="p-5 rounded-2xl bg-brand-50 dark:bg-brand-900/30 border border-brand-100 dark:border-brand-800 space-y-2">
@@ -583,7 +624,7 @@ ${historyText}`;
 ${archiveText}`;
 
             try {
-                const aiResult = await callDirectGeminiAPI(DEFAULT_API_KEY, null, prompt);
+                const aiResult = await callDirectGeminiAPI(getActiveApiKey(), null, prompt);
                 body.innerHTML = `
                     <div class="space-y-4">
                         <div class="p-5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900 space-y-2">
