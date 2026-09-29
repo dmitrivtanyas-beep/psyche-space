@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="uk" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsycheSpace — Розумний AI-Щоденник</title>
+    <!-- Tailwind CSS та Chart.js -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe',
+                            300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6',
+                            600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6',
+                            900: '#4c1d95', 950: '#2e1065'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+</head>
+<body class="h-full bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans transition-colors duration-300 overflow-hidden flex flex-col">
+
+    <!-- HEADER -->
+    <header class="flex-none bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-3 lg:px-8 py-3 flex items-center justify-between z-20">
+        <div class="flex items-center space-x-2.5">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-brand-500/20">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            </div>
+            <div>
+                <h1 class="font-bold text-base leading-tight tracking-tight bg-gradient-to-r from-brand-600 to-indigo-500 bg-clip-text text-transparent">PsycheSpace</h1>
+                <p class="text-[10px] text-slate-500 dark:text-slate-400 hidden sm:block">Розумний простір рефлексії</p>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-1.5 sm:space-x-2">
+            <!-- Кнопка трекера емоцій -->
+            <button onclick="openMoodModal()" class="px-2.5 py-2 text-xs font-medium rounded-xl bg-brand-50 dark:bg-brand-900/40 hover:bg-brand-100 text-brand-700 dark:text-brand-300 transition flex items-center space-x-1 border border-brand-200 dark:border-brand-800" title="Трекер емоцій">
+                <span>😊 Емоції</span>
+            </button>
+            <!-- Озвучення відповідей (TTS) -->
+            <button id="voice-toggle-btn" onclick="toggleVoice()" class="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition relative" title="Озвучення відповідей">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z"/></svg>
+                <span id="voice-indicator" class="absolute top-1 right-1 w-2 h-2 bg-brand-500 rounded-full hidden"></span>
+            </button>
+            <!-- Перемикач теми -->
+            <button onclick="toggleDarkMode()" class="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Змінити тему">
+                <svg id="theme-icon-light" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                <svg id="theme-icon-dark" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+            </button>
+            <!-- Архів сесій -->
+            <button onclick="openAnalyticsModal()" class="px-2.5 py-2 text-xs font-medium rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 transition">
+                Архів
+            </button>
+            <!-- Завершити сесію -->
+            <button id="finish-btn" onclick="finishSession()" class="hidden px-3 py-2 text-xs font-semibold rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 text-white transition flex items-center space-x-1">
+                <span>Закінчити</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN APP BODY -->
+    <div class="flex-1 flex overflow-hidden relative">
+
+        <!-- SIDEBAR -->
+        <aside class="hidden lg:flex flex-col w-80 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-5 overflow-y-auto custom-scrollbar">
+            <div class="mb-5">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Хронологія сесії</h2>
+                <div class="p-4 rounded-2xl bg-brand-50 dark:bg-brand-950/40 border border-brand-100 dark:border-brand-900/50">
+                    <p class="text-xs text-slate-600 dark:text-slate-400">Спілкуйтеся вільно. Кожен крок рефлексії фіксується у ланцюжку нижче.</p>
+                </div>
+            </div>
+            <div class="flex-1">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Ланцюжок думок</h2>
+                <div id="timeline-container" class="space-y-3 relative before:absolute before:inset-0 before:left-3 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800">
+                    <div class="relative pl-7 text-xs text-slate-400 italic">Поки що порожньо...</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CHAT AREA -->
+        <main class="flex-1 flex flex-col bg-slate-50/50 dark:bg-slate-950/50 relative overflow-hidden">
+            
+            <!-- MODE SELECTOR -->
+            <div class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 p-2 sm:p-3 flex items-center justify-between z-10 shadow-sm">
+                <div class="flex items-center space-x-2 w-full max-w-4xl mx-auto px-2">
+                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap hidden sm:block">Режим:</span>
+                    <select id="mode-selector" onchange="changeMode(this.value)" class="w-full sm:w-auto flex-1 appearance-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-brand-50 dark:bg-brand-900/30 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 focus:outline-none cursor-pointer">
+                        <option value="cbt">🧠 КПТ (Когнітивно-поведінковий)</option>
+                        <option value="gestalt">🪑 Гештальт (Тут і зараз)</option>
+                        <option value="problem_solving">🎯 Вирішення проблем (Дія)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- CHAT MESSAGES CONTAINER -->
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 custom-scrollbar">
+                <!-- Welcome Message -->
+                <div class="flex items-start space-x-3 max-w-2xl animate-fade-in">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex-shrink-0 flex items-center justify-center text-white font-bold text-sm">AI</div>
+                    <div class="flex-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm text-sm leading-relaxed">
+                        <p class="font-semibold text-brand-600 dark:text-brand-400 mb-1">Привіт! Я твій емпатичний психологічний компаньйон.</p>
+                        <p class="mb-2">Поділися своїми думками або переживаннями у текстовому форматі.</p>
+                        <p class="text-xs text-slate-400 italic">💡 Працює повністю автономно з браузера.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Typing indicator -->
+            <div id="typing-indicator" class="hidden px-6 py-2 flex items-center space-x-2 text-xs text-slate-400 animate-fade-in">
+                <div class="w-8 h-8 rounded-lg bg-brand-500/10 text-brand-600 flex items-center justify-center font-bold text-xs">AI</div>
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2.5 rounded-2xl flex items-center space-x-1.5 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-bounce"></span>
+                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-bounce [animation-delay:0.2s]"></span>
+                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-bounce [animation-delay:0.4s]"></span>
+                    <span class="ml-2 text-slate-500 text-xs font-medium" id="typing-text">Думає...</span>
+                </div>
+            </div>
+
+            <!-- INPUT AREA -->
+            <div class="flex-none bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4">
+                <form id="chat-form" onsubmit="handleSendMessage(event)" class="max-w-4xl mx-auto flex items-end space-x-3">
+                    <div class="flex-1 bg-slate-100 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 focus-within:border-brand-500 transition px-4 py-3 flex items-end">
+                        <textarea id="user-input" rows="1" placeholder="Напишіть своє повідомлення тут (Enter для відправки)..." onkeydown="handleKeydown(event)" class="w-full bg-transparent text-slate-800 dark:text-slate-100 placeholder-slate-400 text-sm focus:outline-none resize-none max-h-32 custom-scrollbar py-0.5"></textarea>
+                    </div>
+                    <button type="submit" id="send-button" class="p-3.5 shrink-0 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white shadow-md transition flex items-center justify-center relative select-none" title="Відправити повідомлення">
+                        <svg class="w-5 h-5 transform rotate-90 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- MOOD TRACKER MODAL -->
+    <div id="mood-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-fade-in">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Трекер емоційного стану</h2>
+                <button onclick="closeMoodModal()" class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+                <div class="p-4 rounded-2xl bg-brand-50 dark:bg-brand-900/20 border border-brand-100 dark:border-brand-800/50 space-y-4">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-brand-700 dark:text-brand-300">Як ви почуваєтеся зараз?</h3>
+                    <div class="grid grid-cols-5 gap-2 text-center">
+                        <button type="button" onclick="selectMoodScore(1, this)" class="mood-btn p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand-500 transition text-lg">🌧️<br><span class="text-[10px] text-slate-500">Сумно</span></button>
+                        <button type="button" onclick="selectMoodScore(2, this)" class="mood-btn p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand-500 transition text-lg">⚡<br><span class="text-[10px] text-slate-500">Тривожно</span></button>
+                        <button type="button" onclick="selectMoodScore(3, this)" class="mood-btn p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand-500 transition text-lg">😐<br><span class="text-[10px] text-slate-500">Нейтрально</span></button>
+                        <button type="button" onclick="selectMoodScore(4, this)" class="mood-btn p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand-500 transition text-lg border-brand-500 ring-2 ring-brand-500/30">🙂<br><span class="text-[10px] text-brand-600 font-semibold">Добре</span></button>
+                        <button type="button" onclick="selectMoodScore(5, this)" class="mood-btn p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand-500 transition text-lg">😄<br><span class="text-[10px] text-slate-500">Чудово</span></button>
+                    </div>
+                    <input type="hidden" id="selected-mood-score" value="4">
+                    <textarea id="mood-note" rows="2" placeholder="Коротка нотатка про причину чи ситуацію (необов'язково)..." class="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none resize-none text-slate-800 dark:text-slate-100 placeholder-slate-400"></textarea>
+                    <button onclick="saveMoodEntry()" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md transition">Зберегти стан</button>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Динаміка емоцій</h3>
+                    <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 relative h-48">
+                        <canvas id="moodChart"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Історія записів</h3>
+                    <div id="mood-history-list" class="space-y-2">
+                        <p class="text-xs text-slate-400 italic">Поки що немає записів...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUMMARY MODAL -->
+    <div id="summary-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-fade-in">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <h2 id="summary-modal-title" class="text-xl font-bold text-slate-900 dark:text-slate-100">Звіт та аналіз сесії</h2>
+                <button onclick="closeSummaryModal()" class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar" id="summary-modal-body"></div>
+            <div class="p-4 bg-slate-50 dark:bg-slate-900/80 border-t border-slate-100 dark:border-slate-800 flex justify-end space-x-3">
+                <button onclick="closeSummaryModal()" class="px-6 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-semibold">Закрити</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ARCHIVE / ANALYTICS MODAL -->
+    <div id="analytics-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-fade-in">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-4xl w-full max-h-[95vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Архів сесій та аналіз</h2>
+                <button onclick="closeAnalyticsModal()" class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 border-b border-slate-100 dark:border-slate-800 bg-brand-50/50 dark:bg-brand-950/20 flex justify-between items-center">
+                <p class="text-xs text-slate-600 dark:text-slate-400">Ви можете проаналізувати кожну сесію окремо або запустити глобальний мета-аналіз всього архіву.</p>
+                <button onclick="analyzeAllArchive()" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition shadow-sm whitespace-nowrap">
+                    📊 Мета-аналіз архіву
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar" id="archive-list-container"></div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Ваш зашитий ключ Gemini API
+        const DEFAULT_API_KEY = 'AIzaSyAPTstBt_X9I5VkymZd3VGBw-zZWAuW0dA';
+
+        let currentMode = 'cbt'; 
+        let sessionState = { messages: [], timeline: [] };
+        let sessionActive = false;
+
+        function changeMode(newMode) {
+            currentMode = newMode;
+            let name = newMode === 'cbt' ? "КПТ" : newMode === 'gestalt' ? "Гештальт" : "Вирішення проблем";
+            appendMessage('system', `Режим змінено на: <strong>${name}</strong>.`);
+        }
+
+        // --- ЛОГІКА ТРЕКЕРА ЕМОЦІЙ ---
+        let moodChartInstance = null;
+
+        function openMoodModal() {
+            document.getElementById('mood-modal').classList.remove('hidden');
+            renderMoodData();
+        }
+        function closeMoodModal() { document.getElementById('mood-modal').classList.add('hidden'); }
+
+        function selectMoodScore(score, btn) {
+            document.getElementById('selected-mood-score').value = score;
+            document.querySelectorAll('.mood-btn').forEach(b => {
+                b.classList.remove('border-brand-500', 'ring-2', 'ring-brand-500/30');
+            });
+            btn.classList.add('border-brand-500', 'ring-2', 'ring-brand-500/30');
+        }
+
+        function saveMoodEntry() {
+            const score = parseInt(document.getElementById('selected-mood-score').value);
+            const note = document.getElementById('mood-note').value.trim();
+            const dateStr = new Date().toLocaleDateString('uk-UA', { day: 'numeric', month: 'short' }) + ', ' + new Date().toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' });
+            
+            const moods = JSON.parse(localStorage.getItem('psyche_moods') || '[]');
+            moods.push({ date: dateStr, score, note });
+            localStorage.setItem('psyche_moods', JSON.stringify(moods));
+
+            document.getElementById('mood-note').value = '';
+            renderMoodData();
+            alert('Емоційний стан успішно збережено!');
+        }
+
+        function renderMoodData() {
+            const moods = JSON.parse(localStorage.getItem('psyche_moods') || '[]');
+            const historyContainer = document.getElementById('mood-history-list');
+
+            if (moods.length === 0) {
+                historyContainer.innerHTML = `<p class="text-xs text-slate-400 italic text-center py-4">Поки що немає записів...</p>`;
+            } else {
+                const emojis = { 1: '🌧️', 2: '⚡', 3: '😐', 4: '🙂', 5: '😄' };
+                const labels = { 1: 'Сумно', 2: 'Тривожно', 3: 'Нейтрально', 4: 'Добре', 5: 'Чудово' };
+                
+                historyContainer.innerHTML = moods.slice().reverse().map(m => `
+                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-2xl">${emojis[m.score] || '🙂'}</span>
+                            <div>
+                                <p class="text-xs font-bold text-slate-900 dark:text-slate-100">${labels[m.score]} <span class="text-[10px] font-normal text-slate-400">(${m.date})</span></p>
+                                ${m.note ? `<p class="text-[11px] text-slate-600 dark:text-slate-300 mt-0.5">${escapeHtml(m.note)}</p>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            const ctx = document.getElementById('moodChart').getContext('2d');
+            const recentMoods = moods.slice(-10);
+            const chartLabels = recentMoods.map(m => m.date);
+            const chartData = recentMoods.map(m => m.score);
+
+            if (moodChartInstance) { moodChartInstance.destroy(); }
+
+            moodChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels.length ? chartLabels : ['Сьогодні'],
+                    datasets: [{
+                        label: 'Рівень настрою (1-5)',
+                        data: chartData.length ? chartData : [3],
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#8b5cf6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { min: 1, max: 5, ticks: { stepSize: 1, font: { size: 10 } }, grid: { color: 'rgba(200, 200, 200, 0.1)' } },
+                        x: { ticks: { font: { size: 9 } }, grid: { display: false } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        // Озвучення тексту (TTS)
+        let isVoiceEnabled = false;
+        function toggleVoice() {
+            isVoiceEnabled = !isVoiceEnabled;
+            const btn = document.getElementById('voice-toggle-btn');
+            if (isVoiceEnabled) { 
+                btn.classList.add('text-brand-600', 'bg-brand-50'); 
+                document.getElementById('voice-indicator').classList.remove('hidden'); 
+                if(window.speechSynthesis) window.speechSynthesis.speak(new SpeechSynthesisUtterance("Озвучення відповідей увімкнено.")); 
+            } else { 
+                btn.classList.remove('text-brand-600', 'bg-brand-50'); 
+                document.getElementById('voice-indicator').classList.add('hidden'); 
+                if(window.speechSynthesis) window.speechSynthesis.cancel(); 
+            }
+        }
+        function speak(text) {
+            if (!isVoiceEnabled || !window.speechSynthesis) return;
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text); 
+            u.lang = 'uk-UA'; 
+            u.rate = 0.95;
+            window.speechSynthesis.speak(u);
+        }
+
+        function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
+        function handleKeydown(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('chat-form').requestSubmit(); } }
+
+        // Обробка відправки напряму до Google API з клієнта
+        async function handleSendMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('user-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            if (!sessionActive) { 
+                sessionActive = true; 
+                document.getElementById('finish-btn').classList.remove('hidden'); 
+                document.getElementById('finish-btn').classList.add('flex'); 
+            }
+
+            appendMessage('user', text);
+            input.value = '';
+            showTyping(true);
+
+            try {
+                const aiReply = await callDirectGeminiAPI(DEFAULT_API_KEY, sessionState.messages);
+                showTyping(false);
+                appendMessage('ai', aiReply);
+                speak(aiReply);
+                addTimelineStep("Консультація з AI");
+            } catch(err) {
+                showTyping(false);
+                console.warn("Помилка зв'язку з Gemini API, використовуємо локальний режим:", err);
+                appendMessage('system', '⚠️ Сервери зайняті, переходимо на резервний локальний помічник.');
+                setTimeout(() => {
+                    const reply = getSmartLocalResponse(text, currentMode);
+                    appendMessage('ai', reply.text);
+                    speak(reply.text);
+                    addTimelineStep(reply.step);
+                }, 600);
+            }
+        }
+
+        // Виклик Google Gemini API напряму з браузера
+        async function callDirectGeminiAPI(apiKey, messagesHistory, customPrompt) {
+            const systemPrompt = `Ти — професійний емпатичний психологічний AI-компаньйон у додатку PsycheSpace. 
+Поточний терапевтичний режим: ${currentMode}. Відповідай м'яко, глибоко та професійно українською мовою.`;
+
+            let contents = [];
+
+            if (customPrompt) {
+                contents = [{ role: 'user', parts: [{ text: customPrompt }] }];
+            } else {
+                const rawContents = messagesHistory.slice(-10).map(m => ({
+                    role: m.sender === 'user' ? 'user' : 'model',
+                    parts: [{ text: m.text }]
+                }));
+
+                for (let msg of rawContents) {
+                    if (contents.length > 0 && contents[contents.length - 1].role === msg.role) {
+                        contents[contents.length - 1].parts[0].text += "\n" + msg.parts[0].text;
+                    } else {
+                        contents.push(msg);
+                    }
+                }
+            }
+
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    system_instruction: { parts: [{ text: systemPrompt }] },
+                    contents: contents
+                })
+            });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.error?.message || `HTTP помилка: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.candidates[0].content.parts[0].text;
+        }
+
+        function getSmartLocalResponse(text, mode) {
+            const lower = text.toLowerCase();
+            if (lower.includes('що ти вмієш') || lower.includes('хто ти')) {
+                return { text: "Я — твій психологічний компаньйон у PsycheSpace. Допомагаю розібратися в думках через КПТ, Гештальт або Вирішення проблем.", step: "Ознайомлення" };
+            }
+            if (mode === 'cbt') {
+                return { text: "Я слухаю тебе. Яка конкретна думка викликає у тебе найбільше напруження зараз, і на чому вона базується?", step: "Аналіз думок (КПТ)" };
+            } else if (mode === 'gestalt') {
+                return { text: "Зверни увагу на своє тіло в цю хвилину. Що ти відчуваєш фізично, коли говориш про це?", step: "Контакт з тілом (Гештальт)" };
+            } else {
+                return { text: "Давай сфокусуємося на рішенні: який один маленький крок ти можеш зробити просто зараз?", step: "Фокус на дію" };
+            }
+        }
+
+        function addTimelineStep(stepText) {
+            sessionState.timeline.push(stepText);
+            const container = document.getElementById('timeline-container');
+            if (container) {
+                container.innerHTML = '';
+                sessionState.timeline.forEach((step, idx) => {
+                    container.innerHTML += `<div class="relative pl-7 text-xs text-slate-600 dark:text-slate-300 pb-3"><div class="absolute left-1.5 top-1 w-2.5 h-2.5 rounded-full bg-brand-500 ring-4 ring-brand-100 dark:ring-brand-950"></div><p class="font-medium">Крок ${idx + 1}</p><p class="text-slate-500 text-[11px] mt-0.5">${escapeHtml(step)}</p></div>`;
+                });
+            }
+        }
+
+        function appendMessage(sender, text) {
+            const c = document.getElementById('chat-messages'); 
+            const div = document.createElement('div');
+            if (sender === 'system') {
+                div.className = `flex justify-center my-3 animate-fade-in`;
+                div.innerHTML = `<span class="bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 text-[11px] px-3 py-1.5 rounded-xl text-center max-w-md border border-amber-200 dark:border-amber-900">${text}</span>`;
+            } else {
+                const isU = sender === 'user';
+                div.className = `flex items-start space-x-3 max-w-2xl ${isU ? 'ml-auto flex-row-reverse space-x-reverse' : ''} animate-fade-in`;
+                div.innerHTML = `<div class="w-9 h-9 rounded-xl ${isU ? 'bg-slate-700 text-white' : 'bg-gradient-to-tr from-brand-600 to-indigo-500 text-white'} flex-shrink-0 flex items-center justify-center font-bold text-xs">${isU ? 'Я' : 'AI'}</div>
+                                 <div class="flex-1 ${isU ? 'bg-brand-600 text-white' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800'} rounded-2xl p-4 shadow-sm text-sm"><p>${escapeHtml(text)}</p></div>`;
+            }
+            c.appendChild(div); 
+            c.scrollTop = c.scrollHeight;
+            if(sender !== 'system') sessionState.messages.push({ sender, text });
+        }
+        
+        function showTyping(show) { 
+            document.getElementById('typing-indicator').classList.toggle('hidden', !show); 
+            document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight; 
+        }
+
+        function finishSession() {
+            if (sessionState.messages.length < 2) return alert('Поспілкуйтеся трохи більше перед завершенням.');
+            if(window.speechSynthesis) window.speechSynthesis.cancel();
+            
+            const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
+            arc.unshift({
+                id: Date.now(),
+                date: new Date().toLocaleDateString('uk-UA',{day:'numeric',month:'short'})+', '+new Date().toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit'}),
+                mode: currentMode,
+                messages: sessionState.messages,
+                timeline: sessionState.timeline
+            });
+            localStorage.setItem('psyche_archive', JSON.stringify(arc));
+
+            document.getElementById('summary-modal-title').innerText = "Сесію успішно завершено";
+            document.getElementById('summary-modal').classList.remove('hidden');
+            document.getElementById('summary-modal-body').innerHTML = `
+                <div class="p-5 rounded-2xl bg-brand-50 dark:bg-brand-900/30 border border-brand-100 space-y-3">
+                    <h3 class="font-bold text-brand-700 dark:text-brand-300">Ваша сесія збережена в архів</h3>
+                    <p class="text-sm text-slate-700 dark:text-slate-200">Ви можете проаналізувати її в будь-який момент через меню «Архів».</p>
+                </div>
+            `;
+        }
+
+        function closeSummaryModal() { 
+            document.getElementById('summary-modal').classList.add('hidden'); 
+            location.reload();
+        }
+
+        function openAnalyticsModal() {
+            document.getElementById('analytics-modal').classList.remove('hidden');
+            renderArchiveList();
+        }
+        function closeAnalyticsModal() { document.getElementById('analytics-modal').classList.add('hidden'); }
+
+        function renderArchiveList() {
+            const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
+            const container = document.getElementById('archive-list-container');
+            if (arc.length === 0) { 
+                container.innerHTML = `<p class="text-xs text-slate-400 italic text-center py-6">Архів сесій порожній.</p>`; 
+                return; 
+            }
+            container.innerHTML = arc.map((item, index) => `
+                <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div>
+                        <p class="text-xs font-bold text-slate-900 dark:text-slate-100">${escapeHtml(item.date)}</p>
+                        <p class="text-[11px] text-slate-500 mt-0.5">Режим: ${item.mode.toUpperCase()} | Повідомлень: ${item.messages ? item.messages.length : 0}</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="analyzeArchivedSession(${index})" class="px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold transition shadow-sm">
+                            🔍 Аналіз сесії
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Аналіз конкретної сесії напряму з браузера
+        async function analyzeArchivedSession(index) {
+            const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
+            const session = arc[index];
+            if (!session) return;
+
+            document.getElementById('summary-modal-title').innerText = `Аналіз сесії від ${session.date}`;
+            document.getElementById('summary-modal').classList.remove('hidden');
+            
+            const body = document.getElementById('summary-modal-body');
+            body.innerHTML = `<div class="text-center py-12 text-sm text-slate-500 animate-pulse">Виконується глибокий психологічний аналіз сесії через AI...</div>`;
+
+            const historyText = (session.messages || []).map(m => `${m.sender === 'user' ? 'Клієнт' : 'AI'}: ${m.text}`).join('\n');
+            const prompt = `Зроби глибокий психологічний аналіз цієї сесії у режимі ${session.mode}. Виділи головні вердикти, когнітивні патерни, тригери та дай план самодопомоги українською мовою.
+Історія сесії:
+${historyText}`;
+
+            try {
+                const aiResult = await callDirectGeminiAPI(DEFAULT_API_KEY, null, prompt);
+                body.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="p-5 rounded-2xl bg-brand-50 dark:bg-brand-900/30 border border-brand-100 dark:border-brand-800 space-y-2">
+                            <h4 class="font-bold text-brand-700 dark:text-brand-300 text-xs uppercase tracking-wider">💡 AI-Звіт по сесії</h4>
+                            <div class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-line">${escapeHtml(aiResult)}</div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-2">Лог діалогу</h4>
+                            <div class="space-y-2 max-h-48 overflow-y-auto p-3 rounded-xl bg-slate-100 dark:bg-slate-800/50 custom-scrollbar">
+                                ${session.messages.map(m => `<div class="text-xs ${m.sender === 'user' ? 'text-brand-600 dark:text-brand-400 font-medium' : 'text-slate-600 dark:text-slate-300'}"><strong>${m.sender === 'user' ? 'Ви' : 'AI'}:</strong> ${escapeHtml(m.text)}</div>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (err) {
+                body.innerHTML = `<div class="p-4 rounded-xl bg-rose-50 text-rose-700 text-xs">Помилка аналізу: ${escapeHtml(err.message)}</div>`;
+            }
+        }
+
+        // Мета-аналіз усього архіву з браузера
+        async function analyzeAllArchive() {
+            const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
+            if (arc.length === 0) return alert('Архів порожній.');
+
+            document.getElementById('summary-modal-title').innerText = "Глобальний мета-аналіз архіву";
+            document.getElementById('summary-modal').classList.remove('hidden');
+            
+            const body = document.getElementById('summary-modal-body');
+            body.innerHTML = `<div class="text-center py-12 text-sm text-slate-500 animate-pulse">Штучний інтелект аналізує всю історію вашої рефлексії...</div>`;
+
+            const archiveText = arc.map((s, i) => `Сесія #${i+1} (${s.date}, режим: ${s.mode}):\n` + (s.messages || []).map(m => `  ${m.sender}: ${m.text}`).join('\n')).join('\n\n');
+            const prompt = `Проведи комплексний мета-аналіз усього архіву психологічних сесій користувача. Визнач головні довгострокові тенденції, проблеми та дай стратегічні рекомендації українською мовою.
+Архів:
+${archiveText}`;
+
+            try {
+                const aiResult = await callDirectGeminiAPI(DEFAULT_API_KEY, null, prompt);
+                body.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="p-5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900 space-y-2">
+                            <h4 class="font-bold text-indigo-700 dark:text-indigo-300 text-xs uppercase tracking-wider">📈 Мета-аналіз архіву</h4>
+                            <div class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-line">${escapeHtml(aiResult)}</div>
+                        </div>
+                    </div>
+                `;
+            } catch (err) {
+                body.innerHTML = `<div class="p-4 rounded-xl bg-rose-50 text-rose-700 text-xs">Помилка мета-аналізу: ${escapeHtml(err.message)}</div>`;
+            }
+        }
+
+        function escapeHtml(text) { return text.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m])); }
+    </script>
+</body>
+</html>
