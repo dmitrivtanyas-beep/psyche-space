@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PsycheSpace — Автономний AI-Щоденник</title>
+    <title>PsycheSpace — Розумний AI-Щоденник</title>
     <!-- Tailwind CSS та Chart.js -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -45,7 +45,7 @@
             </div>
             <div>
                 <h1 class="font-bold text-base leading-tight tracking-tight bg-gradient-to-r from-brand-600 to-indigo-500 bg-clip-text text-transparent">PsycheSpace</h1>
-                <p class="text-[10px] text-slate-500 dark:text-slate-400 hidden sm:block">Автономний простір рефлексії</p>
+                <p class="text-[10px] text-slate-500 dark:text-slate-400 hidden sm:block">Розумний простір рефлексії</p>
             </div>
         </div>
 
@@ -68,9 +68,9 @@
             <button onclick="openAnalyticsModal()" class="px-2.5 py-2 text-xs font-medium rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 transition">
                 Архів
             </button>
-            <!-- Інформація про систему -->
-            <button onclick="openSettingsModal()" class="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Про систему">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <!-- Кнопка налаштувань API -->
+            <button onclick="openSettingsModal()" class="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Налаштування API ключа">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
             </button>
             <!-- Завершити сесію -->
             <button id="finish-btn" onclick="finishSession()" class="hidden px-3 py-2 text-xs font-semibold rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 text-white transition flex items-center space-x-1">
@@ -87,7 +87,7 @@
             <div class="mb-5">
                 <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Хронологія сесії</h2>
                 <div class="p-4 rounded-2xl bg-brand-50 dark:bg-brand-950/40 border border-brand-100 dark:border-brand-900/50">
-                    <p class="text-xs text-slate-600 dark:text-slate-400">Система аналізує зміст твоїх повідомлень та підлаштовує хід рефлексії.</p>
+                    <p class="text-xs text-slate-600 dark:text-slate-400">Спілкуйтеся вільно. ШІ на базі Groq супроводжує вашу рефлексію.</p>
                 </div>
             </div>
             <div class="flex-1">
@@ -120,8 +120,8 @@
                     <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex-shrink-0 flex items-center justify-center text-white font-bold text-sm">AI</div>
                     <div class="flex-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm text-sm leading-relaxed">
                         <p class="font-semibold text-brand-600 dark:text-brand-400 mb-1">Привіт! Я твій емпатичний психологічний компаньйон.</p>
-                        <p class="mb-2">Я працюю миттєво та надійно прямо в твоєму браузері. Розкажи, що тебе зараз турбує?</p>
-                        <p class="text-xs text-slate-400 italic">💡 Обирай зручний режим сесії зверху та ділися думками без жодних обмежень.</p>
+                        <p class="mb-2">Поділися своїми думками або переживаннями у текстовому форматі.</p>
+                        <p class="text-xs text-slate-400 italic">💡 Натисніть іконку шестерні (⚙️) зверху, щоб ввести ваш безкоштовний ключ Groq API.</p>
                     </div>
                 </div>
             </div>
@@ -133,7 +133,7 @@
                     <span class="w-2 h-2 rounded-full bg-brand-500 animate-bounce"></span>
                     <span class="w-2 h-2 rounded-full bg-brand-500 animate-bounce [animation-delay:0.2s]"></span>
                     <span class="w-2 h-2 rounded-full bg-brand-500 animate-bounce [animation-delay:0.4s]"></span>
-                    <span class="ml-2 text-slate-500 text-xs font-medium" id="typing-text">Аналізує думки...</span>
+                    <span class="ml-2 text-slate-500 text-xs font-medium" id="typing-text">Думає...</span>
                 </div>
             </div>
 
@@ -151,15 +151,16 @@
         </main>
     </div>
 
-    <!-- SETTINGS / INFO MODAL -->
+    <!-- SETTINGS MODAL -->
     <div id="settings-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-fade-in">
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
             <div class="flex items-center justify-between">
-                <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Про автономний режим</h2>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Налаштування Groq API ключа</h2>
                 <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
-            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Ця версія застосунку оптимізована для максимальної стабільності. Вона не вимагає інтернет-завантажень моделей чи API-ключів, працює миттєво на будь-якому пристрої та повністю захищає вашу конфіденційність.</p>
-            <button onclick="closeSettingsModal()" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md transition">Зрозуміло</button>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Введіть ваш безкоштовний ключ, отриманий на <a href="https://console.groq.com/" target="_blank" class="text-brand-600 underline">Groq Console</a>. Ключ зберігається лише у вашому браузері та не потрапить до репозиторію:</p>
+            <input type="password" id="api-key-input" placeholder="Вставте ваш Groq API ключ сюди..." class="w-full px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none text-slate-800 dark:text-slate-100">
+            <button onclick="saveApiKey()" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md transition">Зберегти ключ</button>
         </div>
     </div>
 
@@ -222,7 +223,7 @@
                 <button onclick="closeAnalyticsModal()" class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
             <div class="p-4 border-b border-slate-100 dark:border-slate-800 bg-brand-50/50 dark:bg-brand-950/20 flex justify-between items-center">
-                <p class="text-xs text-slate-600 dark:text-slate-400">Переглядайте та аналізуйте збережені сесії та загальну динаміку.</p>
+                <p class="text-xs text-slate-600 dark:text-slate-400">Ви можете проаналізувати кожну сесію окремо або запустити глобальний мета-аналіз всього архіву.</p>
                 <button onclick="analyzeAllArchive()" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition shadow-sm whitespace-nowrap">
                     📊 Мета-аналіз архіву
                 </button>
@@ -233,8 +234,30 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        function openSettingsModal() { document.getElementById('settings-modal').classList.remove('hidden'); }
-        function closeSettingsModal() { document.getElementById('settings-modal').classList.add('hidden'); }
+        function getActiveGroqKey() {
+            return localStorage.getItem('psyche_groq_api_key') || '';
+        }
+
+        function openSettingsModal() {
+            document.getElementById('settings-modal').classList.remove('hidden');
+            document.getElementById('api-key-input').value = localStorage.getItem('psyche_groq_api_key') || '';
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settings-modal').classList.add('hidden');
+        }
+
+        function saveApiKey() {
+            const key = document.getElementById('api-key-input').value.trim();
+            if (key) {
+                localStorage.setItem('psyche_groq_api_key', key);
+                alert('Ваш Groq API ключ успішно збережено локально!');
+            } else {
+                localStorage.removeItem('psyche_groq_api_key');
+                alert('Ключ видалено.');
+            }
+            closeSettingsModal();
+        }
 
         let currentMode = 'cbt'; 
         let sessionState = { messages: [], timeline: [] };
@@ -362,51 +385,66 @@
         function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
         function handleKeydown(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('chat-form').requestSubmit(); } }
 
-        // Розумний автономний психологічний двигун з аналізом змісту
-        function generateAutonomousResponse(text, mode, messageCount) {
-            const lower = text.toLowerCase();
-            
-            // Якщо користувач питає про можливості чи хелп
-            if (lower.includes('що ти вмієш') || lower.includes('хто ти') || lower.includes('допоможи') || lower.includes('розкажи')) {
-                return { 
-                    text: "Я — твій автономний емпатичний психологічний компаньйон. Допомагаю розбиратися у твоїх емоціях, знаходити і виправляти деструктивні думки (через КПТ), досліджувати тілесні відчуття (Гештальт) або знаходити покрокові рішення для складних ситуацій. Обирай режим у випадаючому списку зверху і ділися тим, що тривожить.", 
-                    step: "Ознайомлення" 
-                };
+        // Виклик Groq API з урахуванням локального ключа
+        async function callGroqAPI(messagesHistory, customPrompt) {
+            const apiKey = getActiveGroqKey();
+            if (!apiKey) {
+                openSettingsModal();
+                throw new Error("Будь ласка, введіть ваш Groq API ключ у налаштуваннях (іконка шестерні зверху).");
             }
 
-            // Якщо є згадка тривоги або суму
-            if (lower.includes('тривог') || lower.includes('сум') || lower.includes('страх') || lower.includes('панік') || lower.includes('депрес')) {
-                return { 
-                    text: "Я чую, що зараз тобі нелегко, і ці емоції справді забирають багато сил. Давай зупинимося на цьому. Що саме найбільше тисне на тебе в цій емоції?", 
-                    step: "Робота з емоційним станом" 
-                };
-            }
+            const systemPrompt = `Ти — професійний емпатичний психологічний AI-компаньйон у додатку PsycheSpace. 
+Поточний терапевтичний режим: ${currentMode}. Відповідай м'яко, глибоко, емпатично та професійно українською мовою.`;
 
-            // Логіка по режимах залежно від розмови
-            if (mode === 'cbt') {
-                if (messageCount <= 1) {
-                    return { text: `Я уважно слухаю. Скажи, яка саме думка чи переконання щодо цієї ситуації викликає у тебе найбільше напруження?`, step: "Виявлення автоматичних думок" };
-                } else if (messageCount === 2) {
-                    return { text: "Давай розберемо цю думку об'єктивно. Які реальні факти підтверджують її, а які — спростовують?", step: "Когнітивна переоцінка" };
-                } else {
-                    return { text: "З огляду на це, яку альтернативну, більш м'яку та збалансовану думку ти можеш сформувати замість старої?", step: "Формулювання нової перспективи" };
-                }
-            } else if (mode === 'gestalt') {
-                if (messageCount <= 1) {
-                    return { text: `Зверни увагу на своє тіло просто зараз. Коли ти думаєш про це, де саме відчувається напруга чи дискомфорт?`, step: "Контакт із тілом" };
-                } else if (messageCount === 2) {
-                    return { text: "Побудь із цим відчуттям кілька секунд без спроб відмахнутися від нього. Що воно ніби намагається тобі підказати?", step: "Усвідомлення в «тут і зараз»" };
-                } else {
-                    return { text: "Дякую, що наважився(-лась) зазирнути туди. Як змінюється твоє внутрішнє відчуття тепер, коли ти це прийняв(-ла)?", step: "Інтеграція досвіду" };
-                }
+            let messages = [
+                { role: "system", content: systemPrompt }
+            ];
+
+            if (customPrompt) {
+                messages.push({ role: "user", content: customPrompt });
             } else {
-                if (messageCount <= 1) {
-                    return { text: `Давай сфокусуємося на практичному рішенні. У чому саме полягає головна перешкода на даний момент?`, step: "Аналіз перешкоди" };
-                } else if (messageCount === 2) {
-                    return { text: "Які є кілька можливих варіантів виходу з цієї ситуації, навіть найменші?", step: "Генерація кроків" };
-                } else {
-                    return { text: "Обери один найпростіший крок із тих, що ми обговорили, який ти можеш зробити вже сьогодні.", step: "Фокус на дію" };
-                }
+                messagesHistory.forEach(m => {
+                    messages.push({
+                        role: m.sender === 'user' ? 'user' : 'assistant',
+                        content: m.text
+                    });
+                });
+            }
+
+            const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: "llama-3.1-8b-instant",
+                    messages: messages,
+                    temperature: 0.7
+                })
+            });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.error?.message || `HTTP помилка: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+
+        // Локальний резервний двигун на випадок відсутності ключа чи мережі
+        function getSmartLocalResponse(text, mode) {
+            const lower = text.toLowerCase();
+            if (lower.includes('що ти вмієш') || lower.includes('хто ти')) {
+                return { text: "Я — твій психологічний компаньйон у PsycheSpace. Допомагаю розібратися в думках через КПТ, Гештальт або Вирішення проблем.", step: "Ознайомлення" };
+            }
+            if (mode === 'cbt') {
+                return { text: "Я слухаю тебе. Яка конкретна думка викликає у тебе найбільше напруження зараз, і на чому вона базується?", step: "Аналіз думок (КПТ)" };
+            } else if (mode === 'gestalt') {
+                return { text: "Зверни увагу на своє тіло в цю хвилину. Що ти відчуваєш фізично, коли говориш про це?", step: "Контакт з тілом (Гештальт)" };
+            } else {
+                return { text: "Давай сфокусуємося на рішенні: який один маленький крок ти можеш зробити просто зараз?", step: "Фокус на дію" };
             }
         }
 
@@ -426,15 +464,29 @@
             input.value = '';
             showTyping(true);
 
-            setTimeout(() => {
+            try {
+                const aiReply = await callGroqAPI(sessionState.messages);
                 showTyping(false);
-                const userMessagesCount = sessionState.messages.filter(m => m.sender === 'user').length;
-                const response = generateAutonomousResponse(text, currentMode, userMessagesCount);
+                appendMessage('ai', aiReply);
+                speak(aiReply);
+                addTimelineStep("Консультація з AI");
+            } catch(err) {
+                showTyping(false);
+                console.warn("Помилка зв'язку з Groq API:", err);
+                appendMessage('system', `⚠️ ${err.message}`);
                 
-                appendMessage('ai', response.text);
-                speak(response.text);
-                addTimelineStep(response.step);
-            }, 700);
+                // Якщо немає ключа — відкриваємо вікно налаштувань
+                if (!getActiveGroqKey()) {
+                    openSettingsModal();
+                } else {
+                    setTimeout(() => {
+                        const reply = getSmartLocalResponse(text, currentMode);
+                        appendMessage('ai', reply.text);
+                        speak(reply.text);
+                        addTimelineStep(reply.step);
+                    }, 600);
+                }
+            }
         }
 
         function addTimelineStep(stepText) {
@@ -552,29 +604,37 @@
             `;
         }
 
-        function analyzeAllArchive() {
+        async function analyzeAllArchive() {
             const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
             if (arc.length === 0) return alert('Архів порожній.');
 
-            document.getElementById('summary-modal-title').innerText = "Глобальний звіт архіву";
+            document.getElementById('summary-modal-title').innerText = "Глобальний мета-аналіз архіву";
             document.getElementById('summary-modal').classList.remove('hidden');
             
-            const totalSessions = arc.length;
-            const totalMessages = arc.reduce((acc, s) => acc + (s.messages ? s.messages.length : 0), 0);
+            const body = document.getElementById('summary-modal-body');
+            body.innerHTML = `<div class="text-center py-12 text-sm text-slate-500 animate-pulse">Штучний інтелект аналізує всю історію вашої рефлексії...</div>`;
 
-            document.getElementById('summary-modal-body').innerHTML = `
-                <div class="space-y-4">
-                    <div class="p-5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900 space-y-3">
-                        <h4 class="font-bold text-indigo-700 dark:text-indigo-300 text-xs uppercase tracking-wider">📈 Статистика рефлексії</h4>
-                        <p class="text-sm text-slate-700 dark:text-slate-200">Всього проведено сесій: <strong>${totalSessions}</strong></p>
-                        <p class="text-sm text-slate-700 dark:text-slate-200">Загальна кількість рефлексійних повідомлень: <strong>${totalMessages}</strong></p>
-                        <p class="text-xs text-slate-500 mt-2">Регулярний аналіз власних станів допомагає краще розуміти тригери та розвивати емоційну стійкість.</p>
+            const archiveText = arc.map((s, i) => `Сесія #${i+1} (${s.date}, режим: ${s.mode}):\n` + (s.messages || []).map(m => `  ${m.sender}: ${m.text}`).join('\n')).join('\n\n');
+            const prompt = `Проведи комплексний мета-аналіз усього архіву психологічних сесій користувача. Визнач головні довгострокові тенденції, проблеми та дай стратегічні рекомендації українською мовою.
+Архів:
+${archiveText}`;
+
+ж            try {
+                const aiResult = await callGroqAPI([], prompt);
+                body.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="p-5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900 space-y-2">
+                            <h4 class="font-bold text-indigo-700 dark:text-indigo-300 text-xs uppercase tracking-wider">📈 Мета-аналіз архіву</h4>
+                            <div class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-line">${escapeHtml(aiResult)}</div>
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
+            } catch (err) {
+                body.innerHTML = `<div class="p-4 rounded-xl bg-rose-50 text-rose-700 text-xs">Помилка мета-аналізу: ${escapeHtml(err.message)}</div>`;
+            }
         }
 
-        function escapeHtml(text) { return text.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m])); }
+        function escapeHtml(text) { return text.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]));}
     </script>
 </body>
 </html>
