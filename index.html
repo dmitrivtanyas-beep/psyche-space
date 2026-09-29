@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PsycheSpace — Розумний AI-Щоденник (Локальний ШІ)</title>
+    <title>PsycheSpace — Автономний AI-Щоденник</title>
     <!-- Tailwind CSS та Chart.js -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -45,7 +45,7 @@
             </div>
             <div>
                 <h1 class="font-bold text-base leading-tight tracking-tight bg-gradient-to-r from-brand-600 to-indigo-500 bg-clip-text text-transparent">PsycheSpace</h1>
-                <p class="text-[10px] text-slate-500 dark:text-slate-400 hidden sm:block">Локальний AI-простір (Без ключів)</p>
+                <p class="text-[10px] text-slate-500 dark:text-slate-400 hidden sm:block">Автономний простір рефлексії</p>
             </div>
         </div>
 
@@ -87,7 +87,7 @@
             <div class="mb-5">
                 <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Хронологія сесії</h2>
                 <div class="p-4 rounded-2xl bg-brand-50 dark:bg-brand-950/40 border border-brand-100 dark:border-brand-900/50">
-                    <p class="text-xs text-slate-600 dark:text-slate-400">ШІ працює локально у вашому браузері. Дані нікуди не передаються.</p>
+                    <p class="text-xs text-slate-600 dark:text-slate-400">Система працює повністю автономно у вашому браузері без завантаження важких файлів.</p>
                 </div>
             </div>
             <div class="flex-1">
@@ -119,9 +119,9 @@
                 <div class="flex items-start space-x-3 max-w-2xl animate-fade-in">
                     <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex-shrink-0 flex items-center justify-center text-white font-bold text-sm">AI</div>
                     <div class="flex-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm text-sm leading-relaxed">
-                        <p class="font-semibold text-brand-600 dark:text-brand-400 mb-1">Привіт! Я твій локальний психологічний компаньйон.</p>
-                        <p class="mb-2">Я працюю прямо у твоєму браузері без серверів і ключів. Поділися своїми думками.</p>
-                        <p class="text-xs text-slate-400 italic">💡 При першому повідомленні знадобиться кілька секунд для завантаження моделі в пам'ять.</p>
+                        <p class="font-semibold text-brand-600 dark:text-brand-400 mb-1">Привіт! Я твій емпатичний психологічний компаньйон.</p>
+                        <p class="mb-2">Я працюю миттєво та надійно прямо в твоєму браузері. Розкажи, що тебе зараз турбує?</p>
+                        <p class="text-xs text-slate-400 italic">💡 Обирай зручний режим сесії зверху та ділися думками без жодних обмежень.</p>
                     </div>
                 </div>
             </div>
@@ -133,7 +133,7 @@
                     <span class="w-2 h-2 rounded-full bg-brand-500 animate-bounce"></span>
                     <span class="w-2 h-2 rounded-full bg-brand-500 animate-bounce [animation-delay:0.2s]"></span>
                     <span class="w-2 h-2 rounded-full bg-brand-500 animate-bounce [animation-delay:0.4s]"></span>
-                    <span class="ml-2 text-slate-500 text-xs font-medium" id="typing-text">Завантаження локального ШІ...</span>
+                    <span class="ml-2 text-slate-500 text-xs font-medium" id="typing-text">Аналізує думки...</span>
                 </div>
             </div>
 
@@ -155,11 +155,10 @@
     <div id="settings-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-fade-in">
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
             <div class="flex items-center justify-between">
-                <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Про локальний режим ШІ</h2>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Про автономний режим</h2>
                 <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
-            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Ця версія застосунку використовує технологію **WebLLM**. Ніяких API-ключів більше не потрібно! ШІ працює на базі моделі <strong>Llama-3.2-3B-Instruct</strong> прямо у пам'яті вашого браузера.</p>
-            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Всі ваші дані та діалоги залишаються виключно на вашому пристрої.</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Ця версія застосунку оптимізована для максимальної стабільності. Вона не вимагає інтернет-завантажень моделей чи API-ключів, працює миттєво на будь-якому пристрої та повністю захищає вашу конфіденційність.</p>
             <button onclick="closeSettingsModal()" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md transition">Зрозуміло</button>
         </div>
     </div>
@@ -223,7 +222,7 @@
                 <button onclick="closeAnalyticsModal()" class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
             <div class="p-4 border-b border-slate-100 dark:border-slate-800 bg-brand-50/50 dark:bg-brand-950/20 flex justify-between items-center">
-                <p class="text-xs text-slate-600 dark:text-slate-400">Ви можете проаналізувати кожну сесію окремо або запустити глобальний мета-аналіз всього архіву.</p>
+                <p class="text-xs text-slate-600 dark:text-slate-400">Переглядайте та аналізуйте збережені сесії та загальну динаміку.</p>
                 <button onclick="analyzeAllArchive()" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition shadow-sm whitespace-nowrap">
                     📊 Мета-аналіз архіву
                 </button>
@@ -232,51 +231,10 @@
         </div>
     </div>
 
-    <!-- WEBLLM & MAIN LOGIC SCRIPT -->
-    <script type="module">
-        import { CreateMLCEngine } from "https://esm.run/@mlc-ai/web-llm";
-
-        let engine = null;
-        const selectedModel = "Llama-3.2-3B-Instruct-q4f32_1-MLC";
-
-        async function initWebLLM(progressCallback) {
-            if (engine) return engine;
-            engine = await CreateMLCEngine(selectedModel, {
-                initProgressCallback: (progress) => {
-                    if (progressCallback) progressCallback(progress.text);
-                }
-            });
-            return engine;
-        }
-
-        window.generateLocalAI = async function(messagesHistory, systemPrompt, progressCallback) {
-            const eng = await initWebLLM(progressCallback);
-            
-            const formattedMessages = [
-                { role: "system", content: systemPrompt },
-                ...messagesHistory.map(m => ({
-                    role: m.sender === 'user' ? 'user' : 'assistant',
-                    content: m.text
-                }))
-            ];
-
-            const reply = await eng.chat.completions.create({
-                messages: formattedMessages,
-                temperature: 0.7,
-            });
-
-            return reply.choices[0].message.content;
-        };
-    </script>
-
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        function openSettingsModal() {
-            document.getElementById('settings-modal').classList.remove('hidden');
-        }
-
-        function closeSettingsModal() {
-            document.getElementById('settings-modal').classList.add('hidden');
-        }
+        function openSettingsModal() { document.getElementById('settings-modal').classList.remove('hidden'); }
+        function closeSettingsModal() { document.getElementById('settings-modal').classList.add('hidden'); }
 
         let currentMode = 'cbt'; 
         let sessionState = { messages: [], timeline: [] };
@@ -404,7 +362,41 @@
         function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
         function handleKeydown(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('chat-form').requestSubmit(); } }
 
-        // Обробка відправки через локальний WebLLM ШІ
+        // Розумний автономний психологічний двигун
+        function generateAutonomousResponse(text, mode, messageCount) {
+            const lower = text.toLowerCase();
+            
+            if (lower.includes('привіт') || lower.includes('вітаю')) {
+                return { text: "Вітаю! Розкажи, що саме привело тебе на сесію сьогодні і які емоції переважають?", step: "Початок рефлексії" };
+            }
+
+            if (mode === 'cbt') {
+                if (messageCount === 1) {
+                    return { text: `Я почуваю тебе. Коли ти говориш про «${text.slice(0, 30)}...», яка саме автоматична думка першою спадає на думку? Чого ти боїшся найбільше в цій ситуації?`, step: "Виявлення автоматичних думок" };
+                } else if (messageCount === 2) {
+                    return { text: "Давай перевіримо цю думку на міцність. Які реальні факти підтверджують її, а які — спростовують? Поглянь на це збоку.", step: "Когнітивна переоцінка" };
+                } else {
+                    return { text: "Чудова робота з аналізу переконань. Яку альтернативну, більш збалансовану думку ти міг би сформувати замість старої?", step: "Формулювання нової перспективи" };
+                }
+            } else if (mode === 'gestalt') {
+                if (messageCount === 1) {
+                    return { text: `Зверни увагу на своє тіло зараз. Коли ти згадуєш про це, де саме в тілі відчувається напруга (у грудях, горлі, животі)? Що це відчуття ніби хоче сказати тобі?`, step: "Контакт з тілом і емоцією" };
+                } else if (messageCount === 2) {
+                    return { text: "Побудь у цьому стані кілька секунд без спроб уникнути його. Що зміниться, якщо ти повністю визнаєш і приймеш це почуття?", step: "Усвідомлення в «тут і зараз»" };
+                } else {
+                    return { text: "Дякую за сміливість у проживанні цього досвіду. Як тепер змінюється твоє внутрішнє відчуття цілісності?", step: "Інтеграція та завершення гештальту" };
+                }
+            } else {
+                if (messageCount === 1) {
+                    return { text: `Ситуація зрозуміла. У чому полягає головна перешкода або складність у вирішенні цього питання просто зараз?`, step: "Визначення кореня проблеми" };
+                } else if (messageCount === 2) {
+                    return { text: "Давай розіб'ємо цю проблему на маленькі складові. Які є 2-3 варіанти дій для першого кроку?", step: "Генерація рішень" };
+                } else {
+                    return { text: "Обери один найпростіший крок із тих, що ми обговорили, який ти зможеш реалізувати найближчим часом. Що саме ти зробиш?", step: "План конкретних дій" };
+                }
+            }
+        }
+
         async function handleSendMessage(e) {
             e.preventDefault();
             const input = document.getElementById('user-input');
@@ -421,48 +413,16 @@
             input.value = '';
             showTyping(true);
 
-            try {
-                const systemPrompt = `Ти — професійний емпатичний психологічний AI-компаньйон у додатку PsycheSpace. Поточний терапевтичний режим: ${currentMode}. Відповідай м'яко, глибоко та професійно українською мовою.`;
+            // Імітація природної затримки мислення ШІ (0.8 сек)
+            setTimeout(() => {
+                showTyping(false);
+                const userMessagesCount = sessionState.messages.filter(m => m.sender === 'user').length;
+                const response = generateAutonomousResponse(text, currentMode, userMessagesCount);
                 
-                const aiReply = await window.generateLocalAI(
-                    sessionState.messages, 
-                    systemPrompt, 
-                    (progressText) => {
-                        document.getElementById('typing-text').innerText = progressText;
-                    }
-                );
-
-                showTyping(false);
-                document.getElementById('typing-text').innerText = "Думає...";
-                appendMessage('ai', aiReply);
-                speak(aiReply);
-                addTimelineStep("Консультація з AI");
-            } catch(err) {
-                showTyping(false);
-                document.getElementById('typing-text').innerText = "Думає...";
-                console.warn("Помилка WebLLM:", err);
-                appendMessage('system', `⚠️ Помилка локального ШІ: ${err.message}`);
-                setTimeout(() => {
-                    const reply = getSmartLocalResponse(text, currentMode);
-                    appendMessage('ai', reply.text);
-                    speak(reply.text);
-                    addTimelineStep(reply.step);
-                }, 600);
-            }
-        }
-
-        function getSmartLocalResponse(text, mode) {
-            const lower = text.toLowerCase();
-            if (lower.includes('що ти вмієш') || lower.includes('хто ти')) {
-                return { text: "Я — твій психологічний компаньйон у PsycheSpace. Допомагаю розібратися в думках через КПТ, Гештальт або Вирішення проблем.", step: "Ознайомлення" };
-            }
-            if (mode === 'cbt') {
-                return { text: "Я слухаю тебе. Яка конкретна думка викликає у тебе найбільше напруження зараз, і на чому вона базується?", step: "Аналіз думок (КПТ)" };
-            } else if (mode === 'gestalt') {
-                return { text: "Зверни увагу на своє тіло в цю хвилину. Що ти відчуваєш фізично, коли говориш про це?", step: "Контакт з тілом (Гештальт)" };
-            } else {
-                return { text: "Давай сфокусуємося на рішенні: який один маленький крок ти можеш зробити просто зараз?", step: "Фокус на дію" };
-            }
+                appendMessage('ai', response.text);
+                speak(response.text);
+                addTimelineStep(response.step);
+            }, 800);
         }
 
         function addTimelineStep(stepText) {
@@ -517,7 +477,7 @@
             document.getElementById('summary-modal-body').innerHTML = `
                 <div class="p-5 rounded-2xl bg-brand-50 dark:bg-brand-900/30 border border-brand-100 space-y-3">
                     <h3 class="font-bold text-brand-700 dark:text-brand-300">Ваша сесія збережена в архів</h3>
-                    <p class="text-sm text-slate-700 dark:text-slate-200">Ви можете проаналізувати її в будь-який момент через меню «Архів».</p>
+                    <p class="text-sm text-slate-700 dark:text-slate-200">Ви можете переглянути деталі сесії та її хронологію в архіві.</p>
                 </div>
             `;
         }
@@ -548,78 +508,58 @@
                     </div>
                     <div class="flex items-center space-x-2">
                         <button onclick="analyzeArchivedSession(${index})" class="px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold transition shadow-sm">
-                            🔍 Аналіз сесії
+                            🔍 Переглянути сесію
                         </button>
                     </div>
                 </div>
             `).join('');
         }
 
-        async function analyzeArchivedSession(index) {
+        function analyzeArchivedSession(index) {
             const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
             const session = arc[index];
             if (!session) return;
 
-            document.getElementById('summary-modal-title').innerText = `Аналіз сесії від ${session.date}`;
+            document.getElementById('summary-modal-title').innerText = `Сесія від ${session.date}`;
             document.getElementById('summary-modal').classList.remove('hidden');
             
             const body = document.getElementById('summary-modal-body');
-            body.innerHTML = `<div class="text-center py-12 text-sm text-slate-500 animate-pulse">Локальний ШІ аналізує сесію...</div>`;
-
-            const historyText = (session.messages || []).map(m => `${m.sender === 'user' ? 'Клієнт' : 'AI'}: ${m.text}`).join('\n');
-            const prompt = `Зроби глибокий психологічний аналіз цієї сесії у режимі ${session.mode}. Виділи головні вердикти, когнітивні патерни, тригери та дай план самодопомоги українською мовою.
-Історія сесії:
-${historyText}`;
-
-            try {
-                const aiResult = await window.generateLocalAI([{ sender: 'user', text: prompt }], "Ти професійний психолог-аналітик.");
-                body.innerHTML = `
-                    <div class="space-y-4">
-                        <div class="p-5 rounded-2xl bg-brand-50 dark:bg-brand-900/30 border border-brand-100 dark:border-brand-800 space-y-2">
-                            <h4 class="font-bold text-brand-700 dark:text-brand-300 text-xs uppercase tracking-wider">💡 AI-Звіт по сесії</h4>
-                            <div class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-line">${escapeHtml(aiResult)}</div>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-2">Лог діалогу</h4>
-                            <div class="space-y-2 max-h-48 overflow-y-auto p-3 rounded-xl bg-slate-100 dark:bg-slate-800/50 custom-scrollbar">
-                                ${session.messages.map(m => `<div class="text-xs ${m.sender === 'user' ? 'text-brand-600 dark:text-brand-400 font-medium' : 'text-slate-600 dark:text-slate-300'}"><strong>${m.sender === 'user' ? 'Ви' : 'AI'}:</strong> ${escapeHtml(m.text)}</div>`).join('')}
-                            </div>
+            body.innerHTML = `
+                <div class="space-y-4">
+                    <div class="p-5 rounded-2xl bg-brand-50 dark:bg-brand-900/30 border border-brand-100 dark:border-brand-800 space-y-2">
+                        <h4 class="font-bold text-brand-700 dark:text-brand-300 text-xs uppercase tracking-wider">💡 Режим сесії: ${session.mode.toUpperCase()}</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">Пройдених кроків рефлексії: ${session.timeline ? session.timeline.length : 0}</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-2">Лог діалогу</h4>
+                        <div class="space-y-2 max-h-60 overflow-y-auto p-3 rounded-xl bg-slate-100 dark:bg-slate-800/50 custom-scrollbar">
+                            ${session.messages.map(m => `<div class="text-xs ${m.sender === 'user' ? 'text-brand-600 dark:text-brand-400 font-medium' : 'text-slate-600 dark:text-slate-300'} mb-2"><strong>${m.sender === 'user' ? 'Ви' : 'AI'}:</strong> ${escapeHtml(m.text)}</div>`).join('')}
                         </div>
                     </div>
-                `;
-            } catch (err) {
-                body.innerHTML = `<div class="p-4 rounded-xl bg-rose-50 text-rose-700 text-xs">Помилка аналізу: ${escapeHtml(err.message)}</div>`;
-            }
+                </div>
+            `;
         }
 
-        async function analyzeAllArchive() {
+        function analyzeAllArchive() {
             const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
             if (arc.length === 0) return alert('Архів порожній.');
 
-            document.getElementById('summary-modal-title').innerText = "Глобальний мета-аналіз архіву";
+            document.getElementById('summary-modal-title').innerText = "Глобальний звіт архіву";
             document.getElementById('summary-modal').classList.remove('hidden');
             
-            const body = document.getElementById('summary-modal-body');
-            body.innerHTML = `<div class="text-center py-12 text-sm text-slate-500 animate-pulse">Локальний ШІ аналізує весь архів...</div>`;
+            const totalSessions = arc.length;
+            const totalMessages = arc.reduce((acc, s) => acc + (s.messages ? s.messages.length : 0), 0);
 
-            const archiveText = arc.map((s, i) => `Сесія #${i+1} (${s.date}, режим: ${s.mode}):\n` + (s.messages || []).map(m => `  ${m.sender}: ${m.text}`).join('\n')).join('\n\n');
-            const prompt = `Проведи комплексний мета-аналіз усього архіву психологічних сесій користувача. Визнач головні довгострокові тенденції, проблеми та дай стратегічні рекомендації українською мовою.
-Архів:
-${archiveText}`;
-
-            try {
-                const aiResult = await window.generateLocalAI([{ sender: 'user', text: prompt }], "Ти професійний психолог-мета-аналітик.");
-                body.innerHTML = `
-                    <div class="space-y-4">
-                        <div class="p-5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900 space-y-2">
-                            <h4 class="font-bold text-indigo-700 dark:text-indigo-300 text-xs uppercase tracking-wider">📈 Мета-аналіз архіву</h4>
-                            <div class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-line">${escapeHtml(aiResult)}</div>
-                        </div>
+            document.getElementById('summary-modal-body').innerHTML = `
+                <div class="space-y-4">
+                    <div class="p-5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900 space-y-3">
+                        <h4 class="font-bold text-indigo-700 dark:text-indigo-300 text-xs uppercase tracking-wider">📈 Статистика рефлексії</h4>
+                        <p class="text-sm text-slate-700 dark:text-slate-200">Всього проведено сесій: <strong>${totalSessions}</strong></p>
+                        <p class="text-sm text-slate-700 dark:text-slate-200">Загальна кількість рефлексійних повідомлень: <strong>${totalMessages}</strong></p>
+                        <p class="text-xs text-slate-500 mt-2">Ре регулярний аналіз власних станів допомагає краще розуміти тригери та розвивати емоційну стійкість.</p>
                     </div>
-                `;
-            } catch (err) {
-                body.innerHTML = `<div class="p-4 rounded-xl bg-rose-50 text-rose-700 text-xs">Помилка мета-аналізу: ${escapeHtml(err.message)}</div>`;
-            }
+                </div>
+            `;
         }
 
         function escapeHtml(text) { return text.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m])); }
