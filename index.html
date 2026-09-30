@@ -287,10 +287,38 @@
         let sessionState = { messages: [], timeline: [] };
         let sessionActive = false;
 
+        // Психологічні дорожні карти для інтелектуального ланцюжка думок
+        const modeRoadmaps = {
+            cbt: [
+                "Визначення ситуації та тригера",
+                "Аналіз автоматичних думок",
+                "Перевірка когнітивних спотворень",
+                "Формулювання альтернативи",
+                "Закріплення нового переконання"
+            ],
+            gestalt: [
+                "Фокус на стані «тут і зараз»",
+                "Контакт з тілесними відчуттями",
+                "Дослідження емоційного блоку",
+                "Усвідомлення справжньої потреби",
+                "Інтеграція та завершення гештальту"
+            ],
+            problem_solving: [
+                "Чітке формулювання проблеми",
+                "Аналіз поточних перешкод",
+                "Генерація можливих варіантів дії",
+                "Вибір оптимального рішення",
+                "План першого практичного кроку"
+            ]
+        };
+
         function changeMode(newMode) {
             currentMode = newMode;
             let name = newMode === 'cbt' ? "КПТ" : newMode === 'gestalt' ? "Гештальт" : "Вирішення проблем";
             appendMessage('system', `Режим змінено на: <strong>${name}</strong>.`);
+            // Очищуємо та ініціалізуємо перший крок нової карти
+            sessionState.timeline = [];
+            addNextTimelineStep();
         }
 
         // --- ЛОГІКА ТРЕКЕРА ЕМОЦІЙ ---
@@ -467,11 +495,11 @@
                 return { text: "Я — твій психологічний компаньйон у PsycheSpace. Допомагаю розібратися в думках через КПТ, Гештальт або Вирішення проблем.", step: "Ознайомлення" };
             }
             if (mode === 'cbt') {
-                return { text: "Я слухаю тебе. Яка конкретна думка викликає у тебе найбільше напруження зараз?", step: "Аналіз думок (КПТ)" };
+                return { text: "Я слухаю тебе. Яка конкретна думка викликає у тебе найбільше напруження зараз?", step: "Аналіз автоматичних думок" };
             } else if (mode === 'gestalt') {
-                return { text: "Зверни увагу на своє тіло зараз. Що ти відчуваєш фізично?", step: "Контакт з тілом (Гештальт)" };
+                return { text: "Зверни увагу на своє тіло зараз. Що ти відчуваєш фізично?", step: "Контакт з тілесними відчуттями" };
             } else {
-                return { text: "Який один маленький крок ти можеш зробити просто зараз?", step: "Фокус на дію" };
+                return { text: "Який один маленький крок ти можеш зробити просто зараз?", step: "План першого кроку" };
             }
         }
 
@@ -485,6 +513,8 @@
                 sessionActive = true; 
                 document.getElementById('finish-btn').classList.remove('hidden'); 
                 document.getElementById('finish-btn').classList.add('flex'); 
+                // Ініціалізуємо перший крок при старті розмови
+                if(sessionState.timeline.length === 0) addNextTimelineStep();
             }
 
             appendMessage('user', text);
@@ -496,7 +526,7 @@
                 showTyping(false);
                 appendMessage('ai', aiReply);
                 speak(aiReply);
-                addTimelineStep("Консультація з AI");
+                addNextTimelineStep(); // Додаємо наступний крок з дорожньої карти
             } catch(err) {
                 showTyping(false);
                 console.warn("Помилка зв'язку з Groq API:", err);
@@ -509,19 +539,40 @@
                         const reply = getSmartLocalResponse(text, currentMode);
                         appendMessage('ai', reply.text);
                         speak(reply.text);
-                        addTimelineStep(reply.step);
+                        addNextTimelineStep();
                     }, 600);
                 }
             }
         }
 
-        function addTimelineStep(stepText) {
+        // Інтелектуальне просування по дорожній карті ланцюжка думок
+        function addNextTimelineStep() {
+            const roadmap = modeRoadmaps[currentMode] || modeRoadmaps['cbt'];
+            const currentIndex = sessionState.timeline.length;
+            const stepText = currentIndex < roadmap.length ? roadmap[currentIndex] : "Глибинна інтеграція досвіду";
+            
+            // Уникаємо дублювання останнього кроку
+            if (sessionState.timeline.length > 0 && sessionState.timeline[sessionState.timeline.length - 1] === stepText) return;
+
             sessionState.timeline.push(stepText);
+            renderTimelineUI();
+        }
+
+        function renderTimelineUI() {
             const container = document.getElementById('timeline-container');
             if (container) {
+                if (sessionState.timeline.length === 0) {
+                    container.innerHTML = `<div class="relative pl-7 text-xs text-slate-400 italic">Поки що порожньо...</div>`;
+                    return;
+                }
                 container.innerHTML = '';
                 sessionState.timeline.forEach((step, idx) => {
-                    container.innerHTML += `<div class="relative pl-7 text-xs text-slate-600 dark:text-slate-300 pb-3"><div class="absolute left-1.5 top-1 w-2.5 h-2.5 rounded-full bg-brand-500 ring-4 ring-brand-100 dark:ring-brand-950"></div><p class="font-medium">Крок ${idx + 1}</p><p class="text-slate-500 text-[11px] mt-0.5">${escapeHtml(step)}</p></div>`;
+                    container.innerHTML += `
+                        <div class="relative pl-7 text-xs text-slate-600 dark:text-slate-300 pb-3">
+                            <div class="absolute left-1.5 top-1 w-2.5 h-2.5 rounded-full bg-brand-500 ring-4 ring-brand-100 dark:ring-brand-950"></div>
+                            <p class="font-medium text-brand-700 dark:text-brand-300">Етап ${idx + 1}</p>
+                            <p class="text-slate-500 text-[11px] mt-0.5">${escapeHtml(step)}</p>
+                        </div>`;
                 });
             }
         }
@@ -655,7 +706,7 @@ ${sessionText}`;
             }
         }
 
-        // Оптимізований глобальний мета-аналіз (Розумний дигест проти перевантаження тексту)
+        // Оптимізований глобальний мета-аналіз (Розумний дигест)
         async function analyzeAllArchive() {
             const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
             if (arc.length === 0) return alert('Архів порожній.');
@@ -666,7 +717,6 @@ ${sessionText}`;
             const body = document.getElementById('summary-modal-body');
             body.innerHTML = `<div class="text-center py-12 text-sm text-slate-500 animate-pulse">Штучний інтелект створює інтелектуальну вижимку та аналізує архів...</div>`;
 
-            // Креативне рішення: згортаємо сирий текст у компактний дигест (останні 15 сесій + ключові тези/етапи)
             const recentSessions = arc.slice(0, 15);
             const archiveDigest = recentSessions.map((s, i) => {
                 const userTextSummary = (s.messages || []).filter(m => m.sender === 'user').map(m => m.text).join('; ');
