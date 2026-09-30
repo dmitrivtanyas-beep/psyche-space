@@ -85,15 +85,22 @@
         <!-- SIDEBAR -->
         <aside class="hidden lg:flex flex-col w-80 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-5 overflow-y-auto custom-scrollbar">
             <div class="mb-5">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Хронологія сесії</h2>
-                <div class="p-4 rounded-2xl bg-brand-50 dark:bg-brand-950/40 border border-brand-100 dark:border-brand-900/50">
-                    <p class="text-xs text-slate-600 dark:text-slate-400">Спілкуйтеся вільно. ШІ на базі Groq супроводжує вашу рефлексію.</p>
+                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Стан сесії</h2>
+                <div class="p-4 rounded-2xl bg-brand-50 dark:bg-brand-950/40 border border-brand-100 dark:border-brand-900/50 space-y-2">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-slate-500">Режим:</span>
+                        <span id="sidebar-mode-name" class="font-bold text-brand-600 dark:text-brand-400">КПТ</span>
+                    </div>
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-slate-500">Повідомлень:</span>
+                        <span id="sidebar-msg-count" class="font-bold text-slate-700 dark:text-slate-200">0</span>
+                    </div>
                 </div>
             </div>
             <div class="flex-1">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Ланцюжок думок</h2>
-                <div id="timeline-container" class="space-y-3 relative before:absolute before:inset-0 before:left-3 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800">
-                    <div class="relative pl-7 text-xs text-slate-400 italic">Поки що порожньо...</div>
+                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Хронологія сесії</h2>
+                <div id="chronology-container" class="space-y-3 relative before:absolute before:inset-0 before:left-3 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800">
+                    <div class="relative pl-7 text-xs text-slate-400 italic">Поки що немає записів у цій сесії...</div>
                 </div>
             </div>
         </aside>
@@ -284,41 +291,20 @@
         }
 
         let currentMode = 'cbt'; 
-        let sessionState = { messages: [], timeline: [] };
+        let sessionState = { messages: [], chronology: [] };
         let sessionActive = false;
 
-        // Психологічні дорожні карти для інтелектуального ланцюжка думок
-        const modeRoadmaps = {
-            cbt: [
-                "Визначення ситуації та тригера",
-                "Аналіз автоматичних думок",
-                "Перевірка когнітивних спотворень",
-                "Формулювання альтернативи",
-                "Закріплення нового переконання"
-            ],
-            gestalt: [
-                "Фокус на стані «тут і зараз»",
-                "Контакт з тілесними відчуттями",
-                "Дослідження емоційного блоку",
-                "Усвідомлення справжньої потреби",
-                "Інтеграція та завершення гештальту"
-            ],
-            problem_solving: [
-                "Чітке формулювання проблеми",
-                "Аналіз поточних перешкод",
-                "Генерація можливих варіантів дії",
-                "Вибір оптимального рішення",
-                "План першого практичного кроку"
-            ]
+        const modeNames = {
+            cbt: 'КПТ (Когнітивно-поведінковий)',
+            gestalt: 'Гештальт (Тут і зараз)',
+            problem_solving: 'Вирішення проблем (Дія)'
         };
 
         function changeMode(newMode) {
             currentMode = newMode;
-            let name = newMode === 'cbt' ? "КПТ" : newMode === 'gestalt' ? "Гештальт" : "Вирішення проблем";
-            appendMessage('system', `Режим змінено на: <strong>${name}</strong>.`);
-            // Очищуємо та ініціалізуємо перший крок нової карти
-            sessionState.timeline = [];
-            addNextTimelineStep();
+            document.getElementById('sidebar-mode-name').innerText = modeNames[newMode].split(' ')[0];
+            appendMessage('system', `Режим змінено на: <strong>${modeNames[newMode]}</strong>.`);
+            addChronologyItem(`Зміна терапевтичного режиму на: ${modeNames[newMode]}`);
         }
 
         // --- ЛОГІКА ТРЕКЕРА ЕМОЦІЙ ---
@@ -492,14 +478,14 @@
         function getSmartLocalResponse(text, mode) {
             const lower = text.toLowerCase();
             if (lower.includes('що ти вмієш') || lower.includes('хто ти')) {
-                return { text: "Я — твій психологічний компаньйон у PsycheSpace. Допомагаю розібратися в думках через КПТ, Гештальт або Вирішення проблем.", step: "Ознайомлення" };
+                return "Я — твій психологічний компаньйон у PsycheSpace. Допомагаю розібратися в думках через КПТ, Гештальт або Вирішення проблем.";
             }
             if (mode === 'cbt') {
-                return { text: "Я слухаю тебе. Яка конкретна думка викликає у тебе найбільше напруження зараз?", step: "Аналіз автоматичних думок" };
+                return "Я слухаю тебе. Яка конкретна думка викликає у тебе найбільше напруження зараз?";
             } else if (mode === 'gestalt') {
-                return { text: "Зверни увагу на своє тіло зараз. Що ти відчуваєш фізично?", step: "Контакт з тілесними відчуттями" };
+                return "Зверни увагу на своє тіло зараз. Що ти відчуваєш фізично?";
             } else {
-                return { text: "Який один маленький крок ти можеш зробити просто зараз?", step: "План першого кроку" };
+                return "Який один маленький крок ти можеш зробити просто зараз?";
             }
         }
 
@@ -513,20 +499,21 @@
                 sessionActive = true; 
                 document.getElementById('finish-btn').classList.remove('hidden'); 
                 document.getElementById('finish-btn').classList.add('flex'); 
-                // Ініціалізуємо перший крок при старті розмови
-                if(sessionState.timeline.length === 0) addNextTimelineStep();
+                addChronologyItem("Початок сесії рефлексії");
             }
 
             appendMessage('user', text);
             input.value = '';
             showTyping(true);
 
+            // Додаємо подію користувача у хронологію сесії
+            addChronologyItem(`Запит: "${text.substring(0, 35)}..."`);
+
             try {
                 const aiReply = await callGroqAPI(sessionState.messages);
                 showTyping(false);
                 appendMessage('ai', aiReply);
                 speak(aiReply);
-                addNextTimelineStep(); // Додаємо наступний крок з дорожньої карти
             } catch(err) {
                 showTyping(false);
                 console.warn("Помилка зв'язку з Groq API:", err);
@@ -537,41 +524,34 @@
                 } else {
                     setTimeout(() => {
                         const reply = getSmartLocalResponse(text, currentMode);
-                        appendMessage('ai', reply.text);
-                        speak(reply.text);
-                        addNextTimelineStep();
+                        appendMessage('ai', reply);
+                        speak(reply);
                     }, 600);
                 }
             }
         }
 
-        // Інтелектуальне просування по дорожній карті ланцюжка думок
-        function addNextTimelineStep() {
-            const roadmap = modeRoadmaps[currentMode] || modeRoadmaps['cbt'];
-            const currentIndex = sessionState.timeline.length;
-            const stepText = currentIndex < roadmap.length ? roadmap[currentIndex] : "Глибинна інтеграція досвіду";
-            
-            // Уникаємо дублювання останнього кроку
-            if (sessionState.timeline.length > 0 && sessionState.timeline[sessionState.timeline.length - 1] === stepText) return;
-
-            sessionState.timeline.push(stepText);
-            renderTimelineUI();
+        // Управління хронологією поточної сесії
+        function addChronologyItem(itemText) {
+            const timeStr = new Date().toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' });
+            sessionState.chronology.push({ time: timeStr, text: itemText });
+            renderChronologyUI();
         }
 
-        function renderTimelineUI() {
-            const container = document.getElementById('timeline-container');
+        function renderChronologyUI() {
+            const container = document.getElementById('chronology-container');
             if (container) {
-                if (sessionState.timeline.length === 0) {
-                    container.innerHTML = `<div class="relative pl-7 text-xs text-slate-400 italic">Поки що порожньо...</div>`;
+                if (sessionState.chronology.length === 0) {
+                    container.innerHTML = `<div class="relative pl-7 text-xs text-slate-400 italic">Поки що немає записів у цій сесії...</div>`;
                     return;
                 }
                 container.innerHTML = '';
-                sessionState.timeline.forEach((step, idx) => {
+                sessionState.chronology.forEach((entry) => {
                     container.innerHTML += `
                         <div class="relative pl-7 text-xs text-slate-600 dark:text-slate-300 pb-3">
                             <div class="absolute left-1.5 top-1 w-2.5 h-2.5 rounded-full bg-brand-500 ring-4 ring-brand-100 dark:ring-brand-950"></div>
-                            <p class="font-medium text-brand-700 dark:text-brand-300">Етап ${idx + 1}</p>
-                            <p class="text-slate-500 text-[11px] mt-0.5">${escapeHtml(step)}</p>
+                            <p class="text-[10px] text-slate-400 font-semibold">${entry.time}</p>
+                            <p class="text-slate-600 dark:text-slate-300 text-[11px] mt-0.5">${escapeHtml(entry.text)}</p>
                         </div>`;
                 });
             }
@@ -591,7 +571,10 @@
             }
             c.appendChild(div); 
             c.scrollTop = c.scrollHeight;
-            if(sender !== 'system') sessionState.messages.push({ sender, text });
+            if(sender !== 'system') {
+                sessionState.messages.push({ sender, text });
+                document.getElementById('sidebar-msg-count').innerText = sessionState.messages.filter(m => m.sender === 'user').length;
+            }
         }
         
         function showTyping(show) { 
@@ -609,7 +592,7 @@
                 date: new Date().toLocaleDateString('uk-UA',{day:'numeric',month:'short'})+', '+new Date().toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit'}),
                 mode: currentMode,
                 messages: sessionState.messages,
-                timeline: sessionState.timeline
+                chronology: sessionState.chronology
             });
             localStorage.setItem('psyche_archive', JSON.stringify(arc));
 
@@ -720,8 +703,8 @@ ${sessionText}`;
             const recentSessions = arc.slice(0, 15);
             const archiveDigest = recentSessions.map((s, i) => {
                 const userTextSummary = (s.messages || []).filter(m => m.sender === 'user').map(m => m.text).join('; ');
-                const timelineSteps = (s.timeline || []).join(' → ');
-                return `Сесія #${i+1} [Дата: ${s.date}, Режим: ${s.mode.toUpperCase()}]:\n  - Етапи рефлексії: ${timelineSteps || 'Стандартна сесія'}\n  - Суть запитів користувача: ${userTextSummary.substring(0, 350)}`;
+                const chronologySteps = (s.chronology || []).map(ch => ch.text).join(' → ');
+                return `Сесія #${i+1} [Дата: ${s.date}, Режим: ${s.mode.toUpperCase()}]:\n  - Хронологія подій: ${chronologySteps || 'Стандартна сесія'}\n  - Суть запитів користувача: ${userTextSummary.substring(0, 350)}`;
             }).join('\n\n');
 
             const prompt = `Проведи глибокий довгостроковий мета-аналіз психологічного стану користувача на основі зведеного дигесту його останніх сесій. Визнач ключові паттерни, тенденції та дай практичні стратегічні рекомендації українською мовою.
