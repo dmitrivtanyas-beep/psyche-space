@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PsycheSpace — Розумний AI-Щоденник</title>
+    <title>PsycheSpace — Оазис Спокою</title>
     <!-- Tailwind CSS та Chart.js -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -15,11 +15,11 @@
                 extend: {
                     fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
                     colors: {
-                        brand: {
-                            50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe',
-                            300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6',
-                            600: '#7c3aed', 700: '#6d28d9', 800: '#5b21b6',
-                            900: '#4c1d95', 950: '#2e1065'
+                        forest: {
+                            50: '#f2f7f4', 100: '#dbe8e1', 200: '#b8d3c5',
+                            300: '#8bb5a1', 400: '#5e9479', 500: '#3a6b52',
+                            600: '#2e5641', 700: '#254434', 800: '#1d3529',
+                            900: '#16281f', 950: '#0d1813'
                         }
                     }
                 }
@@ -30,34 +30,34 @@
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #374151; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
-<body class="h-full bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans transition-colors duration-300 overflow-hidden flex flex-col">
+<body class="h-full bg-[#f4f1ea] dark:bg-[#111816] text-slate-800 dark:text-slate-100 font-sans transition-colors duration-300 overflow-hidden flex flex-col">
 
     <!-- HEADER -->
-    <header class="flex-none bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-3 lg:px-8 py-3 flex items-center justify-between z-20">
-        <div class="flex items-center space-x-2.5">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-brand-500/20">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+    <header class="flex-none bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-emerald-900/10 dark:border-emerald-500/10 px-3 lg:px-8 py-3.5 flex items-center justify-between z-20">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-2xl bg-emerald-700 dark:bg-emerald-600 flex items-center justify-center text-white shadow-md shadow-emerald-700/20">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
             </div>
             <div>
-                <h1 class="font-bold text-base leading-tight tracking-tight bg-gradient-to-r from-brand-600 to-indigo-500 bg-clip-text text-transparent">PsycheSpace</h1>
-                <p class="text-[10px] text-slate-500 dark:text-slate-400 hidden sm:block">Розумний простір рефлексії</p>
+                <h1 class="font-bold text-base leading-tight tracking-tight text-emerald-900 dark:text-emerald-300">Оазис Спокою</h1>
+                <p class="text-[10px] text-slate-500 dark:text-slate-400 hidden sm:block">Простір ментальної гармонії</p>
             </div>
         </div>
 
         <div class="flex items-center space-x-1.5 sm:space-x-2">
             <!-- Кнопка трекера емоцій -->
-            <button onclick="openMoodModal()" class="px-2.5 py-2 text-xs font-medium rounded-xl bg-brand-50 dark:bg-brand-900/40 hover:bg-brand-100 text-brand-700 dark:text-brand-300 transition flex items-center space-x-1 border border-brand-200 dark:border-brand-800" title="Трекер емоцій">
+            <button onclick="openMoodModal()" class="px-3 py-2 text-xs font-medium rounded-xl bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 text-emerald-800 dark:text-emerald-300 transition flex items-center space-x-1 border border-emerald-200 dark:border-emerald-800/60" title="Трекер емоцій">
                 <span>😊 Емоції</span>
             </button>
             <!-- Озвучення відповідей (TTS) -->
             <button id="voice-toggle-btn" onclick="toggleVoice()" class="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition relative" title="Озвучення відповідей">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z"/></svg>
-                <span id="voice-indicator" class="absolute top-1 right-1 w-2 h-2 bg-brand-500 rounded-full hidden"></span>
+                <span id="voice-indicator" class="absolute top-1 right-1 w-2 h-2 bg-emerald-600 rounded-full hidden"></span>
             </button>
             <!-- Перемикач теми -->
             <button onclick="toggleDarkMode()" class="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Змінити тему">
@@ -65,7 +65,7 @@
                 <svg id="theme-icon-dark" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
             </button>
             <!-- Архів сесій -->
-            <button onclick="openAnalyticsModal()" class="px-2.5 py-2 text-xs font-medium rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 transition">
+            <button onclick="openAnalyticsModal()" class="px-3 py-2 text-xs font-medium rounded-xl bg-slate-200/70 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 transition">
                 Архів
             </button>
             <!-- Кнопка налаштувань API -->
@@ -73,7 +73,7 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
             </button>
             <!-- Завершити сесію -->
-            <button id="finish-btn" onclick="finishSession()" class="hidden px-3 py-2 text-xs font-semibold rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 text-white transition flex items-center space-x-1">
+            <button id="finish-btn" onclick="finishSession()" class="hidden px-3.5 py-2 text-xs font-semibold rounded-xl bg-gradient-to-r from-emerald-700 to-emerald-800 text-white transition shadow-sm items-center space-x-1">
                 <span>Закінчити</span>
             </button>
         </div>
@@ -83,13 +83,13 @@
     <div class="flex-1 flex overflow-hidden relative">
 
         <!-- SIDEBAR -->
-        <aside class="hidden lg:flex flex-col w-80 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-5 overflow-y-auto custom-scrollbar">
+        <aside class="hidden lg:flex flex-col w-80 bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border-r border-emerald-900/10 dark:border-emerald-500/10 p-5 overflow-y-auto custom-scrollbar">
             <div class="mb-5">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Стан сесії</h2>
-                <div class="p-4 rounded-2xl bg-brand-50 dark:bg-brand-950/40 border border-brand-100 dark:border-brand-900/50 space-y-2">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-400 mb-3">Стан сесії</h2>
+                <div class="p-4 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-900/10 space-y-2">
                     <div class="flex items-center justify-between text-xs">
                         <span class="text-slate-500">Режим:</span>
-                        <span id="sidebar-mode-name" class="font-bold text-brand-600 dark:text-brand-400">КПТ</span>
+                        <span id="sidebar-mode-name" class="font-bold text-emerald-800 dark:text-emerald-300">КПТ</span>
                     </div>
                     <div class="flex items-center justify-between text-xs">
                         <span class="text-slate-500">Повідомлень:</span>
@@ -98,21 +98,21 @@
                 </div>
             </div>
             <div class="flex-1">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Хронологія сесії</h2>
-                <div id="chronology-container" class="space-y-3 relative before:absolute before:inset-0 before:left-3 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-400 mb-3">Хронологія сесії</h2>
+                <div id="chronology-container" class="space-y-3 relative before:absolute before:inset-0 before:left-3 before:w-0.5 before:bg-emerald-900/10 dark:before:bg-emerald-500/20">
                     <div class="relative pl-7 text-xs text-slate-400 italic">Поки що немає записів у цій сесії...</div>
                 </div>
             </div>
         </aside>
 
         <!-- CHAT AREA -->
-        <main class="flex-1 flex flex-col bg-slate-50/50 dark:bg-slate-950/50 relative overflow-hidden">
+        <main class="flex-1 flex flex-col bg-[#f4f1ea]/40 dark:bg-slate-950/40 relative overflow-hidden">
             
-            <!-- MODE SELECTOR -->
-            <div class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 p-2 sm:p-3 flex items-center justify-between z-10 shadow-sm">
+            <!-- MODE SELECTOR & HERO BANNER INTRO -->
+            <div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-emerald-900/10 dark:border-emerald-500/10 p-3 flex items-center justify-between z-10 shadow-sm">
                 <div class="flex items-center space-x-2 w-full max-w-4xl mx-auto px-2">
-                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap hidden sm:block">Режим:</span>
-                    <select id="mode-selector" onchange="changeMode(this.value)" class="w-full sm:w-auto flex-1 appearance-none px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-brand-50 dark:bg-brand-900/30 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 focus:outline-none cursor-pointer">
+                    <span class="text-[11px] font-bold text-emerald-900 dark:text-emerald-300 uppercase tracking-wider whitespace-nowrap hidden sm:block">Режим:</span>
+                    <select id="mode-selector" onchange="changeMode(this.value)" class="w-full sm:w-auto flex-1 appearance-none px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-900/20 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200 focus:outline-none cursor-pointer">
                         <option value="cbt">🧠 КПТ (Когнітивно-поведінковий)</option>
                         <option value="gestalt">🪑 Гештальт (Тут і зараз)</option>
                         <option value="problem_solving">🎯 Вирішення проблем (Дія)</option>
@@ -122,35 +122,46 @@
 
             <!-- CHAT MESSAGES CONTAINER -->
             <div id="chat-messages" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 custom-scrollbar">
+                
+                <!-- Gorgeous Hero Intro Banner -->
+                <div class="max-w-3xl mx-auto rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-emerald-900 to-emerald-950 text-white shadow-xl relative overflow-hidden mb-6">
+                    <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                    <div class="relative z-10 space-y-3">
+                        <span class="inline-block px-3 py-1 rounded-full bg-emerald-800/80 text-emerald-200 text-[11px] font-semibold tracking-wide uppercase">🌿 Знайдіть свій внутрішній спокій</span>
+                        <h2 class="text-xl sm:text-2xl font-bold tracking-tight">Професійна психологічна підтримка</h2>
+                        <p class="text-xs sm:text-sm text-emerald-100/90 leading-relaxed max-w-xl">Зробіть крок до гармонії вже сьогодні. Поділіться своїми думками у чаті нижче або оберіть зручний режим рефлексії.</p>
+                    </div>
+                </div>
+
                 <!-- Welcome Message -->
                 <div class="flex items-start space-x-3 max-w-2xl animate-fade-in">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex-shrink-0 flex items-center justify-center text-white font-bold text-sm">AI</div>
-                    <div class="flex-1 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm text-sm leading-relaxed">
-                        <p class="font-semibold text-brand-600 dark:text-brand-400 mb-1">Привіт! Я твій емпатичний психологічний компаньйон.</p>
-                        <p class="mb-2">Поділися своїми думками або переживаннями у текстовому форматі.</p>
-                        <p class="text-xs text-slate-400 italic">💡 Натисніть іконку шестерні (⚙️) зверху, щоб налаштувати ключ та модель.</p>
+                    <div class="w-9 h-9 rounded-2xl bg-emerald-700 flex-shrink-0 flex items-center justify-center text-white font-bold text-sm shadow-sm">AI</div>
+                    <div class="flex-1 bg-white dark:bg-slate-900 border border-emerald-900/10 dark:border-slate-800 rounded-3xl p-4 shadow-sm text-sm leading-relaxed">
+                        <p class="font-semibold text-emerald-800 dark:text-emerald-400 mb-1">Привіт! Я твій емпатичний компаньйон в Оазисі Спокою.</p>
+                        <p class="mb-2">Про що ви думаєте в цю хвилину? Напишіть нижче.</p>
+                        <p class="text-xs text-slate-400 italic">💡 Натисніть іконку шестерні (⚙️) зверху, щоб ввести ваш Groq API ключ.</p>
                     </div>
                 </div>
             </div>
 
             <!-- Typing indicator -->
             <div id="typing-indicator" class="hidden px-6 py-2 flex items-center space-x-2 text-xs text-slate-400 animate-fade-in">
-                <div class="w-8 h-8 rounded-lg bg-brand-500/10 text-brand-600 flex items-center justify-center font-bold text-xs">AI</div>
-                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2.5 rounded-2xl flex items-center space-x-1.5 shadow-sm">
-                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-bounce"></span>
-                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-bounce [animation-delay:0.2s]"></span>
-                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-bounce [animation-delay:0.4s]"></span>
-                    <span class="ml-2 text-slate-500 text-xs font-medium" id="typing-text">Думає...</span>
+                <div class="w-8 h-8 rounded-xl bg-emerald-700/10 text-emerald-800 dark:text-emerald-300 flex items-center justify-center font-bold text-xs">AI</div>
+                <div class="bg-white dark:bg-slate-900 border border-emerald-900/10 dark:border-slate-800 px-4 py-2.5 rounded-2xl flex items-center space-x-1.5 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-emerald-700 animate-bounce"></span>
+                    <span class="w-2 h-2 rounded-full bg-emerald-700 animate-bounce [animation-delay:0.2s]"></span>
+                    <span class="w-2 h-2 rounded-full bg-emerald-700 animate-bounce [animation-delay:0.4s]"></span>
+                    <span class="ml-2 text-slate-500 text-xs font-medium">Думає...</span>
                 </div>
             </div>
 
             <!-- INPUT AREA -->
-            <div class="flex-none bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4">
+            <div class="flex-none bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-emerald-900/10 dark:border-emerald-500/10 p-4">
                 <form id="chat-form" onsubmit="handleSendMessage(event)" class="max-w-4xl mx-auto flex items-end space-x-3">
-                    <div class="flex-1 bg-slate-100 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 focus-within:border-brand-500 transition px-4 py-3 flex items-end">
+                    <div class="flex-1 bg-slate-100 dark:bg-slate-800 rounded-2xl border border-emerald-900/10 dark:border-slate-700 focus-within:border-emerald-600 transition px-4 py-3 flex items-end">
                         <textarea id="user-input" rows="1" placeholder="Напишіть своє повідомлення тут (Enter для відправки)..." onkeydown="handleKeydown(event)" class="w-full bg-transparent text-slate-800 dark:text-slate-100 placeholder-slate-400 text-sm focus:outline-none resize-none max-h-32 custom-scrollbar py-0.5"></textarea>
                     </div>
-                    <button type="submit" id="send-button" class="p-3.5 shrink-0 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white shadow-md transition flex items-center justify-center relative select-none" title="Відправити повідомлення">
+                    <button type="submit" id="send-button" class="p-3.5 shrink-0 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white shadow-md transition flex items-center justify-center relative select-none" title="Відправити повідомлення">
                         <svg class="w-5 h-5 transform rotate-90 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
                     </button>
                 </form>
@@ -160,12 +171,12 @@
 
     <!-- SETTINGS MODAL -->
     <div id="settings-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-fade-in">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+        <div class="bg-white dark:bg-slate-900 border border-emerald-900/10 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
             <div class="flex items-center justify-between">
                 <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Налаштування Groq API</h2>
                 <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
-            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Введіть ваш ключ та вкажіть модель, яка доступна на <a href="https://console.groq.com/" target="_blank" class="text-brand-600 underline">Groq Console</a>:</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Введіть ваш ключ та вкажіть модель, яка доступна на <a href="https://console.groq.com/" target="_blank" class="text-emerald-700 underline">Groq Console</a>:</p>
             
             <div class="space-y-3">
                 <div>
@@ -178,34 +189,34 @@
                 </div>
             </div>
 
-            <button onclick="saveApiKey()" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md transition">Зберегти налаштування</button>
+            <button onclick="saveApiKey()" class="w-full py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold shadow-md transition">Зберегти налаштування</button>
         </div>
     </div>
 
     <!-- MOOD TRACKER MODAL -->
     <div id="mood-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-fade-in">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-            <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <div class="bg-white dark:bg-slate-900 border border-emerald-900/10 dark:border-slate-800 rounded-3xl max-w-xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-6 border-b border-emerald-900/10 dark:border-slate-800 flex items-center justify-between">
                 <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Трекер емоційного стану</h2>
                 <button onclick="closeMoodModal()" class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
             <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
-                <div class="p-4 rounded-2xl bg-brand-50 dark:bg-brand-900/20 border border-brand-100 dark:border-brand-800/50 space-y-4">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-brand-700 dark:text-brand-300">Як ви почуваєтеся зараз?</h3>
+                <div class="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-900/10 space-y-4">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">Як ви почуваєтеся зараз?</h3>
                     <div class="grid grid-cols-5 gap-2 text-center">
-                        <button type="button" onclick="selectMoodScore(1, this)" class="mood-btn p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand-500 transition text-lg">🌧️<br><span class="text-[10px] text-slate-500">Сумно</span></button>
-                        <button type="button" onclick="selectMoodScore(2, this)" class="mood-btn p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand-500 transition text-lg">⚡<br><span class="text-[10px] text-slate-500">Тривожно</span></button>
-                        <button type="button" onclick="selectMoodScore(3, this)" class="mood-btn p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand-500 transition text-lg">😐<br><span class="text-[10px] text-slate-500">Нейтрально</span></button>
-                        <button type="button" onclick="selectMoodScore(4, this)" class="mood-btn p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand-500 transition text-lg border-brand-500 ring-2 ring-brand-500/30">🙂<br><span class="text-[10px] text-brand-600 font-semibold">Добре</span></button>
-                        <button type="button" onclick="selectMoodScore(5, this)" class="mood-btn p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand-500 transition text-lg">😄<br><span class="text-[10px] text-slate-500">Чудово</span></button>
+                        <button type="button" onclick="selectMoodScore(1, this)" class="mood-btn p-2.5 rounded-2xl bg-white dark:bg-slate-800 border border-emerald-900/10 dark:border-slate-700 hover:border-emerald-600 transition text-lg">🌧️<br><span class="text-[10px] text-slate-500">Сумно</span></button>
+                        <button type="button" onclick="selectMoodScore(2, this)" class="mood-btn p-2.5 rounded-2xl bg-white dark:bg-slate-800 border border-emerald-900/10 dark:border-slate-700 hover:border-emerald-600 transition text-lg">⚡<br><span class="text-[10px] text-slate-500">Тривожно</span></button>
+                        <button type="button" onclick="selectMoodScore(3, this)" class="mood-btn p-2.5 rounded-2xl bg-white dark:bg-slate-800 border border-emerald-900/10 dark:border-slate-700 hover:border-emerald-600 transition text-lg">😐<br><span class="text-[10px] text-slate-500">Нейтрально</span></button>
+                        <button type="button" onclick="selectMoodScore(4, this)" class="mood-btn p-2.5 rounded-2xl bg-white dark:bg-slate-800 border border-emerald-900/10 dark:border-slate-700 hover:border-emerald-600 transition text-lg border-emerald-600 ring-2 ring-emerald-600/30">🙂<br><span class="text-[10px] text-emerald-700 dark:text-emerald-300 font-semibold">Добре</span></button>
+                        <button type="button" onclick="selectMoodScore(5, this)" class="mood-btn p-2.5 rounded-2xl bg-white dark:bg-slate-800 border border-emerald-900/10 dark:border-slate-700 hover:border-emerald-600 transition text-lg">😄<br><span class="text-[10px] text-slate-500">Чудово</span></button>
                     </div>
                     <input type="hidden" id="selected-mood-score" value="4">
-                    <textarea id="mood-note" rows="2" placeholder="Коротка нотатка про причину чи ситуацію (необов'язково)..." class="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none resize-none text-slate-800 dark:text-slate-100 placeholder-slate-400"></textarea>
-                    <button onclick="saveMoodEntry()" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md transition">Зберегти стан</button>
+                    <textarea id="mood-note" rows="2" placeholder="Коротка нотатка про причину чи ситуацію (необов'язково)..." class="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border border-emerald-900/10 dark:border-slate-700 text-xs focus:outline-none resize-none text-slate-800 dark:text-slate-100 placeholder-slate-400"></textarea>
+                    <button onclick="saveMoodEntry()" class="w-full py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold shadow-md transition">Зберегти стан</button>
                 </div>
                 <div>
                     <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Динаміка емоцій</h3>
-                    <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 relative h-48">
+                    <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-emerald-900/10 dark:border-slate-800 relative h-48">
                         <canvas id="moodChart"></canvas>
                     </div>
                 </div>
@@ -221,28 +232,28 @@
 
     <!-- SUMMARY MODAL -->
     <div id="summary-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-fade-in">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-            <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <div class="bg-white dark:bg-slate-900 border border-emerald-900/10 dark:border-slate-800 rounded-3xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-6 border-b border-emerald-900/10 dark:border-slate-800 flex items-center justify-between">
                 <h2 id="summary-modal-title" class="text-xl font-bold text-slate-900 dark:text-slate-100">Звіт та аналіз сесії</h2>
                 <button onclick="closeSummaryModal()" class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
             <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar" id="summary-modal-body"></div>
-            <div class="p-4 bg-slate-50 dark:bg-slate-900/80 border-t border-slate-100 dark:border-slate-800 flex justify-end space-x-3">
-                <button onclick="closeSummaryModal()" class="px-6 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-semibold">Закрити</button>
+            <div class="p-4 bg-slate-50 dark:bg-slate-900/80 border-t border-emerald-900/10 dark:border-slate-800 flex justify-end space-x-3">
+                <button onclick="closeSummaryModal()" class="px-6 py-2.5 rounded-xl bg-emerald-700 text-white text-sm font-semibold">Закрити</button>
             </div>
         </div>
     </div>
 
     <!-- ARCHIVE / ANALYTICS MODAL -->
     <div id="analytics-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-fade-in">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-4xl w-full max-h-[95vh] flex flex-col shadow-2xl overflow-hidden">
-            <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <div class="bg-white dark:bg-slate-900 border border-emerald-900/10 dark:border-slate-800 rounded-3xl max-w-4xl w-full max-h-[95vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-6 border-b border-emerald-900/10 dark:border-slate-800 flex items-center justify-between">
                 <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Архів сесій та аналіз</h2>
                 <button onclick="closeAnalyticsModal()" class="text-slate-400 hover:text-slate-600"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
-            <div class="p-4 border-b border-slate-100 dark:border-slate-800 bg-brand-50/50 dark:bg-brand-950/20 flex justify-between items-center">
+            <div class="p-4 border-b border-emerald-900/10 dark:border-slate-800 bg-emerald-50/50 dark:bg-emerald-950/20 flex justify-between items-center">
                 <p class="text-xs text-slate-600 dark:text-slate-400">Ви можете проаналізувати кожну сесію окремо або запустити глобальний мета-аналіз архіву.</p>
-                <button onclick="analyzeAllArchive()" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition shadow-sm whitespace-nowrap">
+                <button onclick="analyzeAllArchive()" class="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition shadow-sm whitespace-nowrap">
                     📊 Мета-аналіз архіву
                 </button>
             </div>
@@ -253,7 +264,7 @@
     <!-- JAVASCRIPT LOGIC -->
     <script>
         function getActiveGroqKey() {
-            return localStorage.getItem('psyche_groq_api_key') || '';
+            return localStorage.getItem('psyche_groq_api_key'] || '';
         }
 
         function getActiveGroqModel() {
@@ -319,9 +330,9 @@
         function selectMoodScore(score, btn) {
             document.getElementById('selected-mood-score').value = score;
             document.querySelectorAll('.mood-btn').forEach(b => {
-                b.classList.remove('border-brand-500', 'ring-2', 'ring-brand-500/30');
+                b.classList.remove('border-emerald-600', 'ring-2', 'ring-emerald-600/30');
             });
-            btn.classList.add('border-brand-500', 'ring-2', 'ring-brand-500/30');
+            btn.classList.add('border-emerald-600', 'ring-2', 'ring-emerald-600/30');
         }
 
         function saveMoodEntry() {
@@ -349,7 +360,7 @@
                 const labels = { 1: 'Сумно', 2: 'Тривожно', 3: 'Нейтрально', 4: 'Добре', 5: 'Чудово' };
                 
                 historyContainer.innerHTML = moods.slice().reverse().map(m => `
-                    <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                    <div class="p-3 rounded-2xl bg-white dark:bg-slate-800 border border-emerald-900/10 dark:border-slate-700 flex items-center justify-between shadow-sm">
                         <div class="flex items-center space-x-3">
                             <span class="text-2xl">${emojis[m.score] || '🙂'}</span>
                             <div>
@@ -375,13 +386,13 @@
                     datasets: [{
                         label: 'Рівень настрою (1-5)',
                         data: chartData.length ? chartData : [3],
-                        borderColor: '#8b5cf6',
-                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        borderColor: '#3a6b52',
+                        backgroundColor: 'rgba(58, 107, 82, 0.1)',
                         borderWidth: 2,
                         tension: 0.3,
                         fill: true,
                         pointRadius: 4,
-                        pointBackgroundColor: '#8b5cf6'
+                        pointBackgroundColor: '#3a6b52'
                     }]
                 },
                 options: {
@@ -402,11 +413,11 @@
             isVoiceEnabled = !isVoiceEnabled;
             const btn = document.getElementById('voice-toggle-btn');
             if (isVoiceEnabled) { 
-                btn.classList.add('text-brand-600', 'bg-brand-50'); 
+                btn.classList.add('text-emerald-700', 'bg-emerald-50'); 
                 document.getElementById('voice-indicator').classList.remove('hidden'); 
                 if(window.speechSynthesis) window.speechSynthesis.speak(new SpeechSynthesisUtterance("Озвучення відповідей увімкнено.")); 
             } else { 
-                btn.classList.remove('text-brand-600', 'bg-brand-50'); 
+                btn.classList.remove('text-emerald-700', 'bg-emerald-50'); 
                 document.getElementById('voice-indicator').classList.add('hidden'); 
                 if(window.speechSynthesis) window.speechSynthesis.cancel(); 
             }
@@ -433,7 +444,7 @@
                 throw new Error("Будь ласка, введіть ваш Groq API ключ у налаштуваннях (іконка шестерні зверху).");
             }
 
-            const systemPrompt = `Ти — професійний емпатичний психологічний AI-компаньйон у додатку PsycheSpace. 
+            const systemPrompt = `Ти — професійний емпатичний психологічний AI-компаньйон у додатку Оазис Спокою. 
 Поточний терапевтичний режим: ${currentMode}. 
 ВАЖЛИВО: Відповідай дуже коротко, лаконічно, короткими абзацами (не більше 2-3 речень), без води, довгих вступів та лекцій. Став одне влучне запитання для продовження діалогу. Пиши українською мовою.`;
 
@@ -478,7 +489,7 @@
         function getSmartLocalResponse(text, mode) {
             const lower = text.toLowerCase();
             if (lower.includes('що ти вмієш') || lower.includes('хто ти')) {
-                return "Я — твій психологічний компаньйон у PsycheSpace. Допомагаю розібратися в думках через КПТ, Гештальт або Вирішення проблем.";
+                return "Я — твій психологічний компаньйон в Оазисі Спокою. Допомагаю знайти внутрішню гармонію через КПТ, Гештальт або Вирішення проблем.";
             }
             if (mode === 'cbt') {
                 return "Я слухаю тебе. Яка конкретна думка викликає у тебе найбільше напруження зараз?";
@@ -506,7 +517,6 @@
             input.value = '';
             showTyping(true);
 
-            // Додаємо подію користувача у хронологію сесії
             addChronologyItem(`Запит: "${text.substring(0, 35)}..."`);
 
             try {
@@ -531,7 +541,6 @@
             }
         }
 
-        // Управління хронологією поточної сесії
         function addChronologyItem(itemText) {
             const timeStr = new Date().toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' });
             sessionState.chronology.push({ time: timeStr, text: itemText });
@@ -549,7 +558,7 @@
                 sessionState.chronology.forEach((entry) => {
                     container.innerHTML += `
                         <div class="relative pl-7 text-xs text-slate-600 dark:text-slate-300 pb-3">
-                            <div class="absolute left-1.5 top-1 w-2.5 h-2.5 rounded-full bg-brand-500 ring-4 ring-brand-100 dark:ring-brand-950"></div>
+                            <div class="absolute left-1.5 top-1 w-2.5 h-2.5 rounded-full bg-emerald-700 ring-4 ring-emerald-100 dark:ring-emerald-950"></div>
                             <p class="text-[10px] text-slate-400 font-semibold">${entry.time}</p>
                             <p class="text-slate-600 dark:text-slate-300 text-[11px] mt-0.5">${escapeHtml(entry.text)}</p>
                         </div>`;
@@ -566,8 +575,8 @@
             } else {
                 const isU = sender === 'user';
                 div.className = `flex items-start space-x-3 max-w-2xl ${isU ? 'ml-auto flex-row-reverse space-x-reverse' : ''} animate-fade-in`;
-                div.innerHTML = `<div class="w-9 h-9 rounded-xl ${isU ? 'bg-slate-700 text-white' : 'bg-gradient-to-tr from-brand-600 to-indigo-500 text-white'} flex-shrink-0 flex items-center justify-center font-bold text-xs">${isU ? 'Я' : 'AI'}</div>
-                                 <div class="flex-1 ${isU ? 'bg-brand-600 text-white' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800'} rounded-2xl p-4 shadow-sm text-sm"><p>${escapeHtml(text)}</p></div>`;
+                div.innerHTML = `<div class="w-9 h-9 rounded-2xl ${isU ? 'bg-slate-700 text-white' : 'bg-emerald-700 text-white'} flex-shrink-0 flex items-center justify-center font-bold text-xs shadow-sm">${isU ? 'Я' : 'AI'}</div>
+                                 <div class="flex-1 ${isU ? 'bg-emerald-700 text-white' : 'bg-white dark:bg-slate-900 border border-emerald-900/10 dark:border-slate-800'} rounded-3xl p-4 shadow-sm text-sm"><p>${escapeHtml(text)}</p></div>`;
             }
             c.appendChild(div); 
             c.scrollTop = c.scrollHeight;
@@ -586,7 +595,7 @@
             if (sessionState.messages.length < 2) return alert('Поспілкуйтеся трохи більше перед завершенням.');
             if(window.speechSynthesis) window.speechSynthesis.cancel();
             
-            const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
+            const arc = JSON.parse(localStorage.getItem('psyche_archive'] || '[]');
             arc.unshift({
                 id: Date.now(),
                 date: new Date().toLocaleDateString('uk-UA',{day:'numeric',month:'short'})+', '+new Date().toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit'}),
@@ -599,9 +608,9 @@
             document.getElementById('summary-modal-title').innerText = "Сесію успішно завершено";
             document.getElementById('summary-modal').classList.remove('hidden');
             document.getElementById('summary-modal-body').innerHTML = `
-                <div class="p-5 rounded-2xl bg-brand-50 dark:bg-brand-900/30 border border-brand-100 space-y-3">
-                    <h3 class="font-bold text-brand-700 dark:text-brand-300">Ваша сесія збережена в архів</h3>
-                    <p class="text-sm text-slate-700 dark:text-slate-200">Ви можете переглянути деталі сесії та її хронологію в архіві.</p>
+                <div class="p-5 rounded-3xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-900/10 space-y-3">
+                    <h3 class="font-bold text-emerald-800 dark:text-emerald-300">Сесія успішно збережена в архів</h3>
+                    <p class="text-sm text-slate-700 dark:text-slate-200">Ви можете переглянути деталі та аналіз в архіві сесій.</p>
                 </div>
             `;
         }
@@ -618,20 +627,20 @@
         function closeAnalyticsModal() { document.getElementById('analytics-modal').classList.add('hidden'); }
 
         function renderArchiveList() {
-            const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
+            const arc = JSON.parse(localStorage.getItem('psyche_archive'] || '[]');
             const container = document.getElementById('archive-list-container');
             if (arc.length === 0) { 
                 container.innerHTML = `<p class="text-xs text-slate-400 italic text-center py-6">Архів сесій порожній.</p>`; 
                 return; 
             }
             container.innerHTML = arc.map((item, index) => `
-                <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-emerald-900/10 dark:border-slate-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
                     <div>
                         <p class="text-xs font-bold text-slate-900 dark:text-slate-100">${escapeHtml(item.date)}</p>
                         <p class="text-[11px] text-slate-500 mt-0.5">Режим: ${item.mode.toUpperCase()} | Повідомлень: ${item.messages ? item.messages.length : 0}</p>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <button onclick="analyzeArchivedSession(${index})" class="px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold transition shadow-sm">
+                        <button onclick="analyzeArchivedSession(${index})" class="px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold transition shadow-sm">
                             🔍 Переглянути
                         </button>
                         <button onclick="deleteArchivedSession(${index})" class="px-2.5 py-1.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-600 dark:text-rose-400 text-xs font-semibold transition border border-rose-200 dark:border-rose-900" title="Видалити сесію">
@@ -642,18 +651,16 @@
             `).join('');
         }
 
-        // Функція видалення сесії з архіву
         function deleteArchivedSession(index) {
             if (!confirm('Ви дійсно хочете видалити цю сесію з архіву?')) return;
-            const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
+            const arc = JSON.parse(localStorage.getItem('psyche_archive'] || '[]');
             arc.splice(index, 1);
             localStorage.setItem('psyche_archive', JSON.stringify(arc));
             renderArchiveList();
         }
 
-        // ШІ-аналіз конкретної архівної сесії
         async function analyzeArchivedSession(index) {
-            const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
+            const arc = JSON.parse(localStorage.getItem('psyche_archive'] || '[]');
             const session = arc[index];
             if (!session) return;
 
@@ -672,26 +679,25 @@ ${sessionText}`;
                 const aiAnalysis = await callGroqAPI([], prompt);
                 body.innerHTML = `
                     <div class="space-y-4">
-                        <div class="p-5 rounded-2xl bg-brand-50 dark:bg-brand-900/30 border border-brand-100 dark:border-brand-800 space-y-2">
-                            <h4 class="font-bold text-brand-700 dark:text-brand-300 text-xs uppercase tracking-wider">💡 ШІ-аналіз сесії (${session.mode.toUpperCase()})</h4>
+                        <div class="p-5 rounded-3xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-900/10 space-y-2">
+                            <h4 class="font-bold text-emerald-800 dark:text-emerald-300 text-xs uppercase tracking-wider">💡 ШІ-аналіз сесії (${session.mode.toUpperCase()})</h4>
                             <div class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-line">${escapeHtml(aiAnalysis)}</div>
                         </div>
                         <div>
                             <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-2">Лог діалогу</h4>
-                            <div class="space-y-2 max-h-60 overflow-y-auto p-3 rounded-xl bg-slate-100 dark:bg-slate-800/50 custom-scrollbar">
-                                ${session.messages.map(m => `<div class="text-xs ${m.sender === 'user' ? 'text-brand-600 dark:text-brand-400 font-medium' : 'text-slate-600 dark:text-slate-300'} mb-2"><strong>${m.sender === 'user' ? 'Ви' : 'AI'}:</strong> ${escapeHtml(m.text)}</div>`).join('')}
+                            <div class="space-y-2 max-h-60 overflow-y-auto p-3 rounded-2xl bg-slate-100 dark:bg-slate-800/50 custom-scrollbar">
+                                ${session.messages.map(m => `<div class="text-xs ${m.sender === 'user' ? 'text-emerald-700 dark:text-emerald-400 font-medium' : 'text-slate-600 dark:text-slate-300'} mb-2"><strong>${m.sender === 'user' ? 'Ви' : 'AI'}:</strong> ${escapeHtml(m.text)}</div>`).join('')}
                             </div>
                         </div>
                     </div>
                 `;
             } catch (err) {
-                body.innerHTML = `<div class="p-4 rounded-xl bg-rose-50 text-rose-700 text-xs">Помилка аналізу сесії: ${escapeHtml(err.message)}</div>`;
+                body.innerHTML = `<div class="p-4 rounded-2xl bg-rose-50 text-rose-700 text-xs">Помилка аналізу сесії: ${escapeHtml(err.message)}</div>`;
             }
         }
 
-        // Оптимізований глобальний мета-аналіз (Розумний дигест)
         async function analyzeAllArchive() {
-            const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
+            const arc = JSON.parse(localStorage.getItem('psyche_archive'] || '[]');
             if (arc.length === 0) return alert('Архів порожній.');
 
             document.getElementById('summary-modal-title').innerText = "Глобальний мета-аналіз архіву";
@@ -715,14 +721,14 @@ ${archiveDigest}`;
                 const aiResult = await callGroqAPI([], prompt);
                 body.innerHTML = `
                     <div class="space-y-4">
-                        <div class="p-5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900 space-y-2">
-                            <h4 class="font-bold text-indigo-700 dark:text-indigo-300 text-xs uppercase tracking-wider">📈 Глобальний мета-аналіз архіву</h4>
+                        <div class="p-5 rounded-3xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-900/10 space-y-2">
+                            <h4 class="font-bold text-emerald-800 dark:text-emerald-300 text-xs uppercase tracking-wider">📈 Глобальний мета-аналіз архіву</h4>
                             <div class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-line">${escapeHtml(aiResult)}</div>
                         </div>
                     </div>
                 `;
             } catch (err) {
-                body.innerHTML = `<div class="p-4 rounded-xl bg-rose-50 text-rose-700 text-xs">Помилка мета-аналізу: ${escapeHtml(err.message)}</div>`;
+                body.innerHTML = `<div class="p-4 rounded-2xl bg-rose-50 text-rose-700 text-xs">Помилка мета-аналізу: ${escapeHtml(err.message)}</div>`;
             }
         }
 
