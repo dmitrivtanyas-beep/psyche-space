@@ -264,7 +264,7 @@
     <!-- JAVASCRIPT LOGIC -->
     <script>
         function getActiveGroqKey() {
-            return localStorage.getItem('psyche_groq_api_key'] || '';
+            return localStorage.getItem('psyche_groq_api_key') || '';
         }
 
         function getActiveGroqModel() {
@@ -595,7 +595,7 @@
             if (sessionState.messages.length < 2) return alert('Поспілкуйтеся трохи більше перед завершенням.');
             if(window.speechSynthesis) window.speechSynthesis.cancel();
             
-            const arc = JSON.parse(localStorage.getItem('psyche_archive'] || '[]');
+            const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
             arc.unshift({
                 id: Date.now(),
                 date: new Date().toLocaleDateString('uk-UA',{day:'numeric',month:'short'})+', '+new Date().toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit'}),
@@ -627,7 +627,7 @@
         function closeAnalyticsModal() { document.getElementById('analytics-modal').classList.add('hidden'); }
 
         function renderArchiveList() {
-            const arc = JSON.parse(localStorage.getItem('psyche_archive'] || '[]');
+            const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
             const container = document.getElementById('archive-list-container');
             if (arc.length === 0) { 
                 container.innerHTML = `<p class="text-xs text-slate-400 italic text-center py-6">Архів сесій порожній.</p>`; 
@@ -653,14 +653,14 @@
 
         function deleteArchivedSession(index) {
             if (!confirm('Ви дійсно хочете видалити цю сесію з архіву?')) return;
-            const arc = JSON.parse(localStorage.getItem('psyche_archive'] || '[]');
+            const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
             arc.splice(index, 1);
             localStorage.setItem('psyche_archive', JSON.stringify(arc));
             renderArchiveList();
         }
 
         async function analyzeArchivedSession(index) {
-            const arc = JSON.parse(localStorage.getItem('psyche_archive'] || '[]');
+            const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
             const session = arc[index];
             if (!session) return;
 
@@ -697,7 +697,7 @@ ${sessionText}`;
         }
 
         async function analyzeAllArchive() {
-            const arc = JSON.parse(localStorage.getItem('psyche_archive'] || '[]');
+            const arc = JSON.parse(localStorage.getItem('psyche_archive') || '[]');
             if (arc.length === 0) return alert('Архів порожній.');
 
             document.getElementById('summary-modal-title').innerText = "Глобальний мета-аналіз архіву";
